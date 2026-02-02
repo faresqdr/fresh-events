@@ -77,11 +77,20 @@
     transition: transform 0.3s;
 }
 
+.xp-card h3 {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+}
+
 .xp-card:hover {
     transform: translateY(-5px);
     background: var(--color-secondary);
     color: var(--color-black);
     border-color: var(--color-black);
+}
+
+.xp-card:hover h3 {
+    color: var(--color-black);
 }
 
 .number {
