@@ -12,7 +12,7 @@
         
         <div class="feature-row">
           <div class="feature-image">
-             <img src="https://placehold.co/500x400/000/fff?text=HUMAN+POWER" class="brutalist-img rotate-left" />
+             <img src="https://picsum.photos/seed/teamwork/500/400" class="brutalist-img rotate-left" />
           </div>
           <div class="feature-text">
             <h3>Fiabilité Humaine</h3>
@@ -23,7 +23,7 @@
 
         <div class="feature-row reverse">
           <div class="feature-image">
-             <img src="https://placehold.co/500x400/009406/fff?text=SPEED" class="brutalist-img rotate-right" />
+             <img src="https://picsum.photos/seed/fast-action/500/400" class="brutalist-img rotate-right" />
           </div>
           <div class="feature-text">
             <h3>Maîtrise des Flux</h3>
@@ -34,7 +34,7 @@
 
         <div class="feature-row">
           <div class="feature-image">
-             <img src="https://placehold.co/500x400/fff6d0/000?text=ADAPTABILITY" class="brutalist-img rotate-left" />
+             <img src="https://picsum.photos/seed/flexibility/500/400" class="brutalist-img rotate-left" />
           </div>
           <div class="feature-text">
             <h3>Agilité Totale</h3>
@@ -109,7 +109,8 @@
 .quote-text {
     font-family: var(--font-recoleta);
     font-size: 3rem;
-    text-shadow: 4px 4px 0px var(--color-black);
+    color: var(--color-white);
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5), -2px -2px 0px rgba(255, 255, 255, 0.3);
 }
 
 @media (max-width: 900px) {

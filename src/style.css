@@ -1,195 +1,225 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Gloria+Hallelujah&family=Inter:wght@400;600;800&display=swap');
 
 @font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/gilroy/Gilroy-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
+    font-family: 'Gilroy';
+    src: url('/fonts/gilroy/Gilroy-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/gilroy/Gilroy-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
+    font-family: 'Gilroy';
+    src: url('/fonts/gilroy/Gilroy-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('/fonts/recoleta/Recoleta Alt Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
+    font-family: 'Recoleta';
+    src: url('/fonts/recoleta/Recoleta Alt Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Recoleta';
-  src: url('/fonts/recoleta/Recoleta Alt Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
+    font-family: 'Recoleta';
+    src: url('/fonts/recoleta/Recoleta Alt Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
 }
 
 :root {
-  --color-primary: #009406;
-  --color-secondary: #fff6d0;
-  --color-black: #000000;
-  --color-white: #ffffff;
-  
-  --font-heading: 'Gilroy', 'Anton', sans-serif;
-  --font-recoleta: 'Recoleta', serif;
-  --font-accent: 'Gloria Hallelujah', cursive;
-  --font-body: 'Inter', sans-serif;
-  
-  --border-thick: 3px solid var(--color-black);
-  --shadow-hard: 5px 5px 0px var(--color-black);
-  --shadow-hover: 2px 2px 0px var(--color-black);
+    --color-primary: #009406;
+    --color-secondary: #fff6d0;
+    --color-black: #000000;
+    --color-white: #ffffff;
+
+    --font-heading: 'Gilroy', 'Anton', sans-serif;
+    --font-recoleta: 'Recoleta', serif;
+    --font-accent: 'Gloria Hallelujah', cursive;
+    --font-body: 'Inter', sans-serif;
+
+    --border-thick: 3px solid var(--color-black);
+    --shadow-hard: 5px 5px 0px var(--color-black);
+    --shadow-hover: 2px 2px 0px var(--color-black);
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  font-family: var(--font-body);
-  color: var(--color-black);
-  line-height: 1.6;
-  background-color: var(--color-secondary);
-  font-size: 18px;
+    font-family: var(--font-body);
+    color: var(--color-black);
+    line-height: 1.6;
+    background-color: var(--color-secondary);
+    font-size: 18px;
 }
-  font-family: var(--font-recoleta);
-  font-size: 3.5rem; 
-  letter-spacing: 0px; 
-  text-transform: none; /* Recoleta looks better mixed case */
+
+font-family: var(--font-recoleta);
+font-size: 3.5rem;
+letter-spacing: 0px;
+text-transform: none;
+/* Recoleta looks better mixed case */
 
 
 a {
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-  line-height: 1.1;
-  color: var(--color-black);
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--color-black);
 }
 
-h1 { font-size: 3.5rem; letter-spacing: 2px; }
-h2 { font-size: 2.8rem; margin-bottom: 2rem; }
-h3 { font-size: 1.8rem; }
+h1 {
+    font-size: 3.5rem;
+    letter-spacing: 2px;
+}
+
+h2 {
+    font-size: 2.8rem;
+    margin-bottom: 2rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+}
 
 /* Utility Classes */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .section-padding {
-  padding: 80px 0;
+    padding: 80px 0;
 }
-.text-center { text-align: center; }
-.text-right { text-align: right; }
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
 
 .accent-font {
-  font-family: var(--font-recoleta);
-  color: var(--color-primary);
-  font-weight: 500;
+    font-family: var(--font-recoleta);
+    color: var(--color-primary);
+    font-weight: 500;
 }
 
 /* Brutalist Buttons */
 .btn {
-  display: inline-block;
-  padding: 15px 30px;
-  border: var(--border-thick);
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-hard);
-  position: relative;
-  text-align: center;
+    display: inline-block;
+    padding: 15px 35px;
+    border: 3px solid var(--color-black);
+    font-family: var(--font-recoleta);
+    /* Changed to Recoleta as requested */
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 5px 5px 0px var(--color-black);
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    /* Removed uppercase for Recoleta elegance */
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+    background-color: var(--color-primary);
+    color: var(--color-white);
 }
 
 .btn-primary:hover {
-  transform: translate(3px, 3px);
-  box-shadow: var(--shadow-hover);
+    transform: translate(3px, 3px);
+    box-shadow: var(--shadow-hover);
 }
 
 .btn-secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-black);
+    background-color: var(--color-secondary);
+    color: var(--color-black);
 }
 
-.btn-outline, .btn-outline-white {
-  background: transparent;
-  color: var(--color-black);
-  border: var(--border-thick);
+.btn-outline,
+.btn-outline-white {
+    background: var(--color-white);
+    color: var(--color-black);
+    border: 3px solid var(--color-black);
 }
 
 .btn-outline-white {
-    border-color: var(--color-white);
-    color: var(--color-white);
+    border-color: var(--color-black);
+    color: var(--color-black);
     box-shadow: 5px 5px 0px var(--color-white);
 }
+
 .btn-outline-white:hover {
     transform: translate(3px, 3px);
     box-shadow: 2px 2px 0px var(--color-white);
-    background: transparent;
-    color: var(--color-primary);
-    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-black);
 }
 
 
 .btn-outline:hover {
-  background-color: var(--color-black);
-  color: var(--color-white);
+    background-color: var(--color-black);
+    color: var(--color-white);
 }
 
 /* Cards & Boxes */
 .card {
-  background: var(--color-white);
-  border: var(--border-thick);
-  padding: 30px;
-  box-shadow: var(--shadow-hard);
-  transition: transform 0.3s;
+    background: var(--color-white);
+    border: var(--border-thick);
+    padding: 30px;
+    box-shadow: var(--shadow-hard);
+    transition: transform 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 8px 8px 0px var(--color-primary);
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 0px var(--color-primary);
 }
 
 .bg-dark {
-  background-color: var(--color-black);
-  color: var(--color-secondary);
+    background-color: var(--color-black);
+    color: var(--color-secondary);
 }
 
 .bg-primary-block {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+    background-color: var(--color-primary);
+    color: var(--color-white);
 }
 
-.bg-primary-block h1, .bg-primary-block h2, .bg-primary-block h3 {
-  color: var(--color-white);
+.bg-primary-block h1,
+.bg-primary-block h2,
+.bg-primary-block h3 {
+    color: var(--color-white);
 }
 
-.bg-dark h1, .bg-dark h2, .bg-dark h3 {
-  color: var(--color-white);
+.bg-dark h1,
+.bg-dark h2,
+.bg-dark h3 {
+    color: var(--color-white);
 }
 
 .bg-primary {
-  background-color: var(--color-primary);
-  color: var(--color-white);
+    background-color: var(--color-primary);
+    color: var(--color-white);
 }
 
 .bg-light {
@@ -198,29 +228,37 @@ h3 { font-size: 1.8rem; }
 
 /* Grid System Override */
 .grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
 }
 
 .grid-3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
 }
 
 /* Image Styles */
 img.brutalist-img {
-  border: var(--border-thick);
-  box-shadow: var(--shadow-hard);
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+    border: var(--border-thick);
+    box-shadow: var(--shadow-hard);
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
 
 @media (max-width: 768px) {
-  h1 { font-size: 2.5rem; }
-  h2 { font-size: 2rem; }
-  .grid-2 { grid-template-columns: 1fr; }
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
 }

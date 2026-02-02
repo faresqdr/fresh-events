@@ -39,7 +39,7 @@
                </ul>
            </div>
            <div class="focus-img">
-               <img src="https://placehold.co/600x500/000/fff?text=FRESH+FOOD" class="brutalist-img" />
+               <img src="https://picsum.photos/seed/food-kitchen/600/500" class="brutalist-img" />
            </div>
         </div>
       </div>

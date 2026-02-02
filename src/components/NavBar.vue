@@ -57,7 +57,7 @@ const toggleMenu = () => {
 }
 
 .nav-logo {
-  height: 60px;
+  height: 100px;
   width: auto;
   object-fit: contain;
   /* Optionnel : si le logo est sur fond transparent avec texte noir, on peut l'inverser ou lui donner un fond */
@@ -65,7 +65,7 @@ const toggleMenu = () => {
   /* padding: 5px; */
   /* border-radius: 4px; */
   border: 2px solid var(--color-black);
-  box-shadow: 4px 4px 0px var(--color-primary);
+  box-shadow: 5px 5px 0px var(--color-primary);
   background: var(--color-secondary); /* Fond crème pour matcher le style sticker */
 }
 
@@ -77,26 +77,32 @@ const toggleMenu = () => {
 
 .nav-links a {
   color: var(--color-black);
-  font-family: var(--font-heading);
-  text-transform: uppercase;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
+  font-family: var(--font-recoleta);
+  font-size: 1.4rem;
+  letter-spacing: 0px;
+  padding-bottom: 5px;
+  font-weight: 500;
 }
 
 .nav-links a:not(.btn):hover {
   color: var(--color-primary);
-  text-decoration: underline;
-  text-decoration-thickness: 3px;
+  text-decoration: none;
+  border-bottom: 3px solid var(--color-primary);
 }
 
 .nav-cta {
-  padding: 10px 20px;
-  font-size: 1rem;
-  box-shadow: 3px 3px 0 var(--color-white);
-  border-color: var(--color-white);
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  box-shadow: 5px 5px 0 var(--color-black);
+  border: 3px solid var(--color-black);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  transform: rotate(-2deg);
 }
 .nav-cta:hover {
-  box-shadow: 1px 1px 0 var(--color-white);
+  box-shadow: 8px 8px 0 var(--color-black);
+  transform: rotate(-2deg) translate(-2px, -2px);
 }
 
 .menu-toggle {
@@ -126,7 +132,7 @@ const toggleMenu = () => {
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: var(--color-black);
+    background-color: var(--color-white);
     flex-direction: column;
     padding: 20px 0;
     display: none;
@@ -138,10 +144,28 @@ const toggleMenu = () => {
   }
 
   .nav-links a {
+    color: var(--color-black);
     padding: 15px;
     width: 100%;
     text-align: center;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--color-primary);
+  }
+
+  .nav-links a:not(.btn):hover {
+    background-color: var(--color-secondary);
+  }
+
+  .nav-cta {
+    margin: 15px auto;
+    padding: 14px 35px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: block;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: 3px solid var(--color-black);
+    box-shadow: 6px 6px 0 var(--color-black);
+    transform: rotate(-1deg);
   }
 }
 </style>

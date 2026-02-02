@@ -3,7 +3,7 @@
     <section class="page-header bg-primary-block">
       <div class="container text-center">
         <h1 class="big-title">On gère. <span class="highlight-stroke">Vous soufflez.</span></h1>
-        <p class="subtitle">L'externalisation totale comme levier de performance.</p>
+        <p class="subtitle" style="font-family: var(--font-recoleta);">L'externalisation totale comme levier de performance.</p>
       </div>
     </section>
 
@@ -152,8 +152,8 @@
 .badass-number {
   font-family: var(--font-heading);
   font-size: 4rem;
-  color: var(--color-primary);
-  text-shadow: 3px 3px 0 var(--color-white);
+  color: var(--color-white);
+  text-shadow: 3px 3px 0 var(--color-primary);
   display: block;
 }
 
@@ -162,6 +162,12 @@
   justify-content: center;
   gap: 50px;
   flex-wrap: wrap;
+}
+
+.point h3 {
+  color: var(--color-white);
+  font-size: 1.2rem;
+  margin: 0;
 }
 
 .mt-5 { margin-top: 3rem; }

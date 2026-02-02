@@ -1,3 +1,22 @@
+<script setup>
+const partners = [
+  { name: 'Zoo d\'Amnéville', logo: '/logos/partners/zoo_amneville.png', url: 'https://www.zoo-amneville.com' },
+  { name: 'Arcelor Mittal', logo: '/logos/partners/arcelor-mittal.png', url: 'https://www.arcelormittal.com' },
+  { name: 'Seven Casino', logo: '/logos/partners/casino.png', url: 'https://www.seven-casino.fr' },
+  { name: 'Golden Tulip', logo: '/logos/partners/golden-tulip.png', url: 'https://www.goldentulip.com' },
+  { name: 'Le Galaxie', logo: '/logos/partners/galaxie.png', url: 'https://www.legaxie.fr'},
+  { name: 'Moselle', logo: '/logos/partners/moselle.png', url: 'https://www.moselle.fr' },
+  { name: 'GRDF', logo: '/logos/partners/grdf.png', url: 'https://www.grdf.fr' },
+  { name: 'France Judo', logo: '/logos/partners/france-judo.png', url: 'https://www.ffjudo.fr' },
+  { name: 'Socotec', logo: '/logos/partners/socotec.png', url: 'https://www.socotec.fr' },
+  { name: 'Équatour', logo: '/logos/partners/equatour.png', url: 'https://www.equatour.fr' },
+  { name: 'Renault', logo: '/logos/partners/renault.png', url: 'https://www.renault.fr' },
+  { name: 'Séminaire Amnéville', logo: '/logos/partners/seminaire-amneville.png', url: 'https://www.seminaire-amneville.com' },
+  { name: 'Car Avenue', logo: '/logos/partners/peugeot.png', url: 'https://www.caravenue.fr' },
+  { name: 'Mondelez International', logo: '/logos/partners/mondelez.png', url: 'https://www.mondelezinternational.com' }
+]
+</script>
+
 <template>
   <div class="home-view">
     <!-- Hero Section -->
@@ -19,7 +38,7 @@
             </div>
          </div>
          <div class="hero-visual">
-            <img src="https://placehold.co/600x700/fff6d0/000?text=FRESH+VIBES" alt="Fresh Events Team" class="brutalist-img main-img" />
+            <img src="https://picsum.photos/seed/catering/600/700" alt="Fresh Events Team" class="brutalist-img main-img" />
             <div class="floating-badge">
               <span>ZÉRO</span><br>STRESS
             </div>
@@ -32,7 +51,7 @@
       <div class="container">
         <div class="grid-2">
            <div class="visual-col">
-              <img src="https://placehold.co/600x400/fff/000?text=GESTION+DE+FOULE" alt="Crowd" class="brutalist-img" />
+              <img src="https://picsum.photos/seed/event-crowd/600/400" alt="Crowd" class="brutalist-img" />
            </div>
            <div class="text-col">
               <h2 class="section-title">Fiabilité Opérationnelle & <span class="highlight-text">Rentabilité</span></h2>
@@ -73,23 +92,19 @@
     <!-- Social Proof -->
     <section class="social-proof section-padding">
       <div class="container text-center">
-        <h2>Ils nous font <span class="accent-font">super</span> confiance</h2>
-        
-        <div class="partners-grid-funky">
-          <img src="/logos/partners/amneville.png" alt="Zoo d’Amnéville" class="partner-logo rotate-left" />
-          <img src="/logos/partners/arcelor-mittal.png" alt="Arcelor Mittal" class="partner-logo rotate-right" />
-          <img src="/logos/partners/casino.png" alt="Seven Casino" class="partner-logo rotate-left" />
-          <img src="/logos/partners/golden-tulip.png" alt="Golden Tulip" class="partner-logo rotate-right" />
-          <img src="/logos/partners/galaxie.png" alt="Le Galaxie" class="partner-logo rotate-left" style="background-color: var(--color-black);" />
-          <img src="/logos/partners/moselle.png" alt="Moselle" class="partner-logo rotate-right" />
-          <img src="/logos/partners/grdf.png" alt="GRDF" class="partner-logo rotate-left" />
-          <img src="/logos/partners/france-judo.png" alt="France Judo" class="partner-logo rotate-right" />
-        </div>
+        <h2>Nos partenaires</h2>
+        <p class="subtitle" style="font-size: 1.1rem; transform: none; margin-bottom: 40px; color: var(--color-black);">Ceux qui nous font confiance.</p>
 
-        <div class="img-strip mt-5">
-           <img src="https://placehold.co/300x200/fff/000?text=Event+1" class="brutalist-img small" />
-           <img src="https://placehold.co/300x200/fff6d0/000?text=Event+2" class="brutalist-img small" />
-           <img src="https://placehold.co/300x200/fff/000?text=Event+3" class="brutalist-img small" />
+        <div class="partners-grid">
+           <a v-for="partner in partners" :key="partner.name" :href="partner.url" target="_blank" rel="noopener" class="partner-card">
+              <img :src="partner.logo" :alt="partner.name" class="partner-img" />
+           </a>
+           <RouterLink to="/contact" class="partner-card cta-card">
+              <div class="cta-content">
+                 <div style="font-size: 3rem; margin-bottom: 15px; opacity: 0.4;">?</div>
+                 <p style="font-size: 0.9rem; font-weight: bold;">Votre logo<br/>ici?</p>
+              </div>
+           </RouterLink>
         </div>
       </div>
     </section>
@@ -206,34 +221,6 @@
   font-size: 4rem;
 }
 
-.bg-dark-title {
-  color: var(--color-white);
-}
-
-.partners-grid-funky {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-
-.partner-logo {
-  height: 140px;
-  width: auto;
-  border: 3px solid var(--color-black);
-  box-shadow: 4px 4px 0px var(--color-primary);
-  background: white;
-  padding: 15px;
-  object-fit: contain;
-  transition: transform 0.3s;
-}
-
-.partner-logo:hover {
-    transform: scale(1.1) rotate(0deg) !important;
-    z-index: 10;
-}
-
 .rotate-left { transform: rotate(-3deg); }
 .rotate-right { transform: rotate(3deg); }
 
@@ -243,6 +230,56 @@
   gap: 20px;
   margin-top: 60px;
   flex-wrap: wrap;
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+  max-width: 100%;
+}
+
+.partner-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: white;
+  border: 3px solid var(--color-black);
+  box-shadow: 5px 5px 0px var(--color-primary);
+  transition: all 0.3s;
+  text-decoration: none;
+  min-height: 150px;
+}
+
+.partner-card:hover {
+  transform: translate(-5px, -5px);
+  box-shadow: 10px 10px 0px var(--color-primary);
+}
+
+.partner-img {
+  max-width: 100%;
+  height: auto;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+.cta-card {
+  background: var(--color-primary);
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.cta-content {
+  text-align: center;
+  width: 100%;
+}
+
+.cta-card:hover {
+  background: var(--color-black);
+  transform: translate(-5px, -5px);
+  box-shadow: 10px 10px 0px var(--color-primary);
 }
 
 .small {
@@ -257,8 +294,9 @@
 
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
-  .hero-title { font-size: 3.5rem; }
+  .hero-title { font-size: 3rem; }
   .hero-actions { justify-content: center; }
-  .hero-visual { display: none; } /* Hide visual on mobile for simplicity or adjust */
+  .hero-visual { display: none; }
+  .description { margin-left: auto; margin-right: auto; }
 }
 </style>

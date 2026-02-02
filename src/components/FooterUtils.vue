@@ -82,9 +82,14 @@
 h4 {
   color: var(--color-primary);
   margin-bottom: 25px;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: var(--font-recoleta);
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
 }
 
 ul li {
@@ -92,13 +97,24 @@ ul li {
 }
 
 ul li a {
-  font-size: 1.1rem; 
-  font-weight: 600;
+  color: var(--color-black);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 1rem; 
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
 }
 
 ul li a:hover {
-  color: var(--color-primary);
-  text-decoration: underline;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 2px 5px;
+  border-color: var(--color-black);
+  box-shadow: 3px 3px 0px var(--color-black);
+  transform: rotate(-2deg);
+  display: inline-block;
 }
 
 .footer-bottom {

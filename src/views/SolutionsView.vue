@@ -16,7 +16,7 @@
              <p class="desc">Absorber des flux de 50 000 personnes ? Easy. Signalétique visible, débit maximum, ambiance de feu.</p>
          </div>
          <div class="visual">
-             <img src="https://placehold.co/600x400/009406/fff?text=FESTIVAL+VIBES" class="brutalist-img" />
+             <img src="https://picsum.photos/seed/festival/600/400" class="brutalist-img" />
          </div>
       </div>
     </section>
@@ -30,7 +30,7 @@
              <p class="desc">Qualité de service irreprochable pour impressionner vos clients. Buffets soignés, staff élégant.</p>
          </div>
          <div class="visual">
-             <img src="https://placehold.co/600x400/000/fff?text=CORPORATE+CLASS" class="brutalist-img" />
+             <img src="https://picsum.photos/seed/corporate-business/600/400" class="brutalist-img" />
          </div>
       </div>
     </section>
@@ -44,7 +44,7 @@
              <p class="desc">Musées, Parcs, Stades. Gestion pérenne ou saisonnière. On fidélise vos visiteurs par l'estomac.</p>
          </div>
          <div class="visual">
-             <img src="https://placehold.co/600x400/fff6d0/000?text=FUN+TIMES" class="brutalist-img" />
+             <img src="https://picsum.photos/seed/party-celebration/600/400" class="brutalist-img" />
          </div>
       </div>
     </section>
