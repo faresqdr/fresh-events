@@ -14,7 +14,8 @@ const router = createRouter({
             name: 'home',
             component: HomeView,
             meta: {
-                title: 'Fresh Events | Expert Restauration Événémentielle'
+                title: 'Fresh Events - Restauration Événémentielle & Séminaires à Amnéville',
+                description: 'Expert en restauration événémentielle à Amnéville. Séminaires, événements d\'entreprise, food services. 10+ ans d\'expérience, conforme HACCP.'
             }
         },
         {
@@ -22,7 +23,8 @@ const router = createRouter({
             name: 'offer',
             component: OfferView,
             meta: {
-                title: 'Notre Offre | Restauration Clé en Main'
+                title: 'Services de Restauration Événémentielle | Fresh Events',
+                description: 'Offres de restauration clé en main pour événements d\'entreprise, séminaires et food events à Amnéville.'
             }
         },
         {
@@ -30,7 +32,8 @@ const router = createRouter({
             name: 'why-us',
             component: WhyUsView,
             meta: {
-                title: 'Pourquoi Nous Choisir | Fresh Events'
+                title: 'Pourquoi Choisir Fresh Events | Expertise & Qualité',
+                description: 'Découvrez pourquoi Fresh Events est le partenaire idéal pour vos événements professionnels et séminaires.'
             }
         },
         {
@@ -38,7 +41,8 @@ const router = createRouter({
             name: 'expertise',
             component: ExpertiseView,
             meta: {
-                title: 'Savoir-Faire & Expérience | Fresh Events'
+                title: '10 Ans d\'Expertise en Restauration Événémentielle | Fresh Events',
+                description: 'Découvrez notre expérience, nos certifications HACCP et notre support terrain 24/7 pour tous vos événements.'
             }
         },
         {
@@ -46,7 +50,8 @@ const router = createRouter({
             name: 'solutions',
             component: SolutionsView,
             meta: {
-                title: 'Solutions Sur Mesure | Fresh Events'
+                title: 'Solutions Personnalisées pour Événements | Fresh Events',
+                description: 'Solutions sur mesure pour événements d\'entreprise, séminaires, food events. Amnéville et région.'
             }
         },
         {
@@ -54,7 +59,8 @@ const router = createRouter({
             name: 'contact',
             component: ContactView,
             meta: {
-                title: 'Contact & Devis | Fresh Events'
+                title: 'Contact & Devis | Fresh Events',
+                description: 'Contactez-nous pour un devis personnalisé pour votre événement ou séminaire à Amnéville.'
             }
         }
     ],
@@ -67,9 +73,19 @@ const router = createRouter({
     }
 })
 
-// Update document title on route change
+// Update document title and meta description on route change
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title || 'Fresh Events'
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]')
+    if (!metaDescription) {
+        metaDescription = document.createElement('meta')
+        metaDescription.name = 'description'
+        document.head.appendChild(metaDescription)
+    }
+    metaDescription.content = to.meta.description || 'Fresh Events - Restauration événémentielle premium à Amnéville'
+    
     next()
 })
 
