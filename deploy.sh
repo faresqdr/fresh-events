@@ -30,6 +30,10 @@ set +a
 PROJECT_DIR=$(pwd)
 DOMAIN=${DOMAIN:-_}
 BACKEND_PORT=${PORT:-3001}
+NGINX_SITE_NAME=${NGINX_SITE_NAME:-${DOMAIN}}
+if [ "$NGINX_SITE_NAME" = "_" ] || [ -z "$NGINX_SITE_NAME" ]; then
+    NGINX_SITE_NAME="fresh-events"
+fi
 
 # Step 1: Install dependencies
 echo -e "${BLUE}📍 Installing dependencies...${NC}"
@@ -45,8 +49,8 @@ echo -e "${GREEN}✅ Frontend built${NC}\n"
 if command -v nginx >/dev/null 2>&1; then
     echo -e "${BLUE}📍 Configuring Nginx...${NC}"
 
-    NGINX_AVAILABLE="/etc/nginx/sites-available/fresh-events"
-    NGINX_ENABLED="/etc/nginx/sites-enabled/fresh-events"
+    NGINX_AVAILABLE="/etc/nginx/sites-available/${NGINX_SITE_NAME}"
+    NGINX_ENABLED="/etc/nginx/sites-enabled/${NGINX_SITE_NAME}"
 
     NGINX_CONFIG="server {
     listen 80;
@@ -69,6 +73,14 @@ if command -v nginx >/dev/null 2>&1; then
     }
 }"
 
+    if [ ! -d "/etc/nginx/sites-available" ]; then
+        sudo mkdir -p "/etc/nginx/sites-available"
+    fi
+
+    if [ ! -d "/etc/nginx/sites-enabled" ]; then
+        sudo mkdir -p "/etc/nginx/sites-enabled"
+    fi
+
     if [ -w "/etc/nginx/sites-available" ]; then
         echo "$NGINX_CONFIG" > "$NGINX_AVAILABLE"
     else
@@ -79,7 +91,8 @@ if command -v nginx >/dev/null 2>&1; then
         sudo ln -s "$NGINX_AVAILABLE" "$NGINX_ENABLED"
     fi
 
-    sudo nginx -t && (sudo systemctl reload nginx || sudo service nginx reload)
+    sudo nginx -t
+    sudo systemctl reload nginx 2>/dev/null || sudo service nginx reload
     echo -e "${GREEN}✅ Nginx configured${NC}\n"
 else
     echo -e "${YELLOW}⚠️  Nginx not found. Skipping Nginx config.${NC}\n"
