@@ -1,0 +1,38 @@
+# Fresh Events robots.txt
+# Optimized for SEO - Allow all crawlers with strategic rate limiting
+
+User-agent: *
+Allow: /
+Allow: /src/
+Allow: /*.js
+Allow: /*.css
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /*?*sort=
+Disallow: /*?*order=
+Disallow: /admin/
+Disallow: /private/
+Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 5
+
+# Sitemap location
+Sitemap: https://fresh-events.fr/sitemap.xml
+Sitemap: https://fresh-events.fr/sitemap-pages.xml

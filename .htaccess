@@ -1,0 +1,99 @@
+# Fresh Events .htaccess - SEO & Performance Optimization
+
+# Enable GZIP Compression
+<ifModule mod_deflate.c>
+  AddType application/x-font-ttf .ttf
+  AddType application/x-font-otf .otf
+  AddType application/x-font-opentype .otf
+  AddType image/svg+xml .svg
+  
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript image/svg+xml
+</ifModule>
+
+# Browser Caching
+<ifModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 2592000 seconds"
+  
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  
+  # CSS & JS
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  
+  # Fonts
+  ExpiresByType application/x-font-ttf "access plus 1 year"
+  ExpiresByType application/x-font-otf "access plus 1 year"
+  ExpiresByType font/opentype "access plus 1 year"
+  
+  # HTML
+  ExpiresByType text/html "access plus 0 seconds"
+</ifModule>
+
+# Disable ETags
+<ifModule mod_headers.c>
+  Header unset ETag
+  FileETag None
+  Header set Cache-Control "max-age=2592000, public"
+  Header set Vary "Accept-Encoding"
+</ifModule>
+
+# Rewrite Rules for Vue Router
+<ifModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Remove www if present
+  RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+  RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+  
+  # HTTPS redirect
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+  # Vue Router handling
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+  
+  # Prevent access to sensitive files
+  RewriteRule "^\." - [F]
+</ifModule>
+
+# Security Headers
+<ifModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</ifModule>
+
+# Block access to certain files
+<FilesMatch "\.(env|json|lock|sql|bak)$">
+  Deny from all
+</FilesMatch>
+
+# Enable mod_rewrite
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Remove trailing slash
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)/$ /$1 [R=301,L]
+  
+  # Add trailing slash to directories
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.*[^/])$ /$1/ [R=301,L]
+</IfModule>
