@@ -1,174 +1,308 @@
+<script setup>
+import { onMounted } from 'vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+onMounted(() => {
+  // Animations disabled for immediate visibility
+  console.log('OfferView mounted - animations disabled for testing')
+})
+</script>
+
 <template>
   <div class="offer-view">
-    <section class="page-header bg-primary-block">
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary">
       <div class="container text-center">
-        <h1 class="big-title">On gère. <span class="highlight-stroke">Vous soufflez.</span></h1>
-        <p class="subtitle" style="font-family: var(--font-recoleta);">L'externalisation totale comme levier de performance.</p>
+        <p class="uppercase" style="color: rgba(255,255,255,0.8); font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 1.5rem;">Notre Offre</p>
+        <h1 class="text-white">Vous Organisez. <br><span class="accent-text">Nous Gérons.</span></h1>
+        <div class="accent-line accent-line-center" style="background: rgba(255,255,255,0.3); margin: 2rem auto;"></div>
+        <p class="text-lg text-white" style="max-width: 700px; margin: 0 auto; opacity: 0.9;">
+          L'externalisation complète de votre restauration événementielle. 
+          Un partenaire unique, une solution totale.
+        </p>
       </div>
     </section>
 
-    <section class="pillars section-padding">
+    <!-- Pillars Section -->
+    <section class="pillars-section section-padding-lg">
       <div class="container">
-        <div class="grid-3">
-          <div class="pillar-card rotate-1">
-            <div class="card-header">01</div>
-            <h3>Ops & Logistics</h3>
-            <p>On gère le recrutement, la formation, l'approvisionnement flux tendu et le montage des structures.</p>
-            <div class="sticker">DONE</div>
+        <div class="section-header text-center">
+          <p class="uppercase accent-color">Nos Piliers</p>
+          <h2>Une Approche 360°</h2>
+          <div class="accent-line accent-line-center"></div>
+        </div>
+
+        <div class="pillars-grid grid-3">
+          <div class="pillar-card">
+            <span class="pillar-number">01</span>
+            <h3>Opérations & Logistique</h3>
+            <p>
+              Recrutement et formation du personnel, approvisionnement en flux tendu, 
+              montage et démontage des structures. Chaque détail est maîtrisé.
+            </p>
+            <div class="pillar-features">
+              <span class="feature-tag">Personnel formé</span>
+              <span class="feature-tag">Logistique optimisée</span>
+              <span class="feature-tag">Installation complète</span>
+            </div>
           </div>
-          <div class="pillar-card rotate-2">
-            <div class="card-header">02</div>
-            <h3>Safety First</h3>
-            <p>Traçabilité, normes HACCP, gestion des déchets. Pas de blague avec l'hygiène.</p>
-            <div class="sticker">SAFE</div>
+
+          <div class="pillar-card">
+            <span class="pillar-number">02</span>
+            <h3>Sécurité & Conformité</h3>
+            <p>
+              Traçabilité alimentaire complète, respect strict des normes HACCP, 
+              gestion responsable des déchets. La sécurité sanitaire est notre priorité absolue.
+            </p>
+            <div class="pillar-features">
+              <span class="feature-tag">Normes HACCP</span>
+              <span class="feature-tag">Traçabilité totale</span>
+              <span class="feature-tag">Gestion déchets</span>
+            </div>
           </div>
-          <div class="pillar-card rotate-1">
-            <div class="card-header">03</div>
-            <h3>User Experience</h3>
-            <p>Files d'attente fluides, paiement rapide, sourire garanti. L'expérience client avant tout.</p>
-            <div class="sticker">WOW</div>
+
+          <div class="pillar-card">
+            <span class="pillar-number">03</span>
+            <h3>Expérience Client</h3>
+            <p>
+              Files d'attente optimisées, paiement rapide et sécurisé, service attentionné. 
+              Nous transformons chaque visite en expérience positive.
+            </p>
+            <div class="pillar-features">
+              <span class="feature-tag">Flux optimisés</span>
+              <span class="feature-tag">Service premium</span>
+              <span class="feature-tag">Satisfaction garantie</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="economic-model section-padding">
-      <div class="container">
-        <div class="brutalist-box">
-          <h2>Modèle "No Risk, All Reward"</h2>
-          <p class="lead accent-font">Oubliez les coûts fixes.</p>
-          <p class="desc">Fresh Events propose des partenariats basés sur la performance (redevance CA ou gestion déléguée).</p>
-          
-          <div class="model-points">
-            <div class="point">
-              <span class="badass-number">0€</span>
-              <h3>Investissement</h3>
+    <!-- Economic Model Section -->
+    <section class="model-section section-padding bg-cream">
+      <div class="container-narrow">
+        <div class="model-card">
+          <div class="text-center">
+            <p class="uppercase accent-color">Modèle Économique</p>
+            <h2>Performance Sans Risque</h2>
+            <div class="accent-line accent-line-center"></div>
+            <p class="text-lg" style="max-width: 600px; margin: 2rem auto;">
+              Oubliez les investissements lourds et les risques opérationnels. 
+              Fresh Events propose un partenariat basé sur la performance.
+            </p>
+          </div>
+
+          <div class="model-grid">
+            <div class="model-point">
+              <span class="model-number accent-color">0€</span>
+              <h3>Investissement Initial</h3>
+              <p>Aucun investissement requis de votre part</p>
             </div>
-            <div class="point">
-              <span class="badass-number">0%</span>
-              <h3>Risque</h3>
+            <div class="model-point">
+              <span class="model-number accent-color">0%</span>
+              <h3>Risque Opérationnel</h3>
+              <p>Nous assumons l'intégralité des risques</p>
             </div>
-            <div class="point">
-              <span class="badass-number">100%</span>
-              <h3>Rentabilité</h3>
+            <div class="model-point">
+              <span class="model-number accent-color">100%</span>
+              <h3>Transparence</h3>
+              <p>Reporting complet et suivi en temps réel</p>
             </div>
           </div>
-          
-          <div class="text-center mt-5">
-            <RouterLink to="/contact" class="btn btn-primary">Let's talk money</RouterLink>
+
+          <div class="model-description">
+            <h4>Modèles de partenariat</h4>
+            <ul class="premium-list">
+              <li><strong>Redevance sur CA :</strong> Partage équitable des revenus générés</li>
+              <li><strong>Gestion déléguée :</strong> Nous gérons, vous profitez</li>
+              <li><strong>Solutions hybrides :</strong> Sur mesure selon vos besoins</li>
+            </ul>
+          </div>
+
+          <div class="text-center" style="margin-top: 3rem;">
+            <RouterLink to="/contact" class="btn btn-primary btn-large">Discutons de Votre Projet</RouterLink>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-mini bg-primary section-padding">
+      <div class="container text-center">
+        <h3 class="text-white" style="font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 1.5rem;">
+          Prêt à externaliser votre restauration ?
+        </h3>
+        <p class="text-white" style="opacity: 0.9; margin-bottom: 2rem;">
+          Contactez-nous pour une étude personnalisée de vos besoins.
+        </p>
+        <RouterLink to="/contact" class="btn btn-outline-white btn-large">Nous Contacter</RouterLink>
       </div>
     </section>
   </div>
 </template>
 
 <style scoped>
-.page-header {
-  padding: 100px 0;
-  border-bottom: 5px solid var(--color-primary);
+.hero-section {
+  padding: clamp(6rem, 15vw, 10rem) 0;
 }
 
-.big-title {
-  font-size: 4.5rem;
-  color: var(--color-white);
-  line-height: 1;
+/* Pillars */
+.pillars-section {
+  background: var(--color-white);
 }
 
-.highlight-stroke {
-  color: transparent;
-  -webkit-text-stroke: 2px var(--color-primary);
-}
-
-.subtitle {
-  color: var(--color-secondary);
-  font-family: var(--font-accent);
-  font-size: 1.5rem;
-  margin-top: 20px;
+.pillars-grid {
+  margin-top: 4rem;
 }
 
 .pillar-card {
   background: var(--color-white);
-  border: 3px solid var(--color-black);
-  padding: 30px;
+  padding: 3rem 2.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all var(--transition-base);
   position: relative;
-  box-shadow: 8px 8px 0px var(--color-black);
-  transition: all 0.2s;
 }
 
 .pillar-card:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 12px 12px 0px var(--color-primary);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-accent);
 }
 
-.card-header {
-  background: var(--color-black);
-  color: var(--color-white);
-  display: inline-block;
-  padding: 5px 15px;
+.pillar-number {
   font-family: var(--font-heading);
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+  font-size: 3rem;
+  color: var(--color-accent);
+  opacity: 0.15;
+  font-weight: 300;
+  line-height: 1;
+  display: block;
+  margin-bottom: 1rem;
 }
 
 .pillar-card h3 {
-  font-size: 2rem;
-  margin-bottom: 10px;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--color-black);
 }
 
-.sticker {
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  background: var(--color-primary); /* Yellow sticker */
-  color: var(--color-white);
-  padding: 10px;
-  border-radius: 50%;
-  font-weight: bold;
-  font-family: var(--font-heading);
-  transform: rotate(15deg);
-  border: 2px solid var(--color-black);
-  width: 60px;
-  height: 60px;
+.pillar-card p {
+  color: var(--color-black);
+  opacity: 0.75;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.pillar-features {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
-.rotate-1 { transform: rotate(-1deg); }
-.rotate-2 { transform: rotate(1deg); }
+.feature-tag {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.9rem;
+  background: var(--color-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  color: var(--color-black);
+}
 
-.brutalist-box {
-  background: var(--color-black);
-  color: var(--color-white);
-  padding: 60px;
-  border: 4px solid var(--color-primary);
+/* Economic Model */
+.model-card {
+  background: var(--color-white);
+  padding: clamp(3rem, 6vw, 5rem);
+  box-shadow: var(--shadow-lg);
+}
+
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin: 4rem 0;
+  padding: 3rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.model-point {
   text-align: center;
 }
 
-.desc { max-width: 600px; margin: 0 auto 40px; }
-
-.badass-number {
+.model-number {
   font-family: var(--font-heading);
-  font-size: 4rem;
-  color: var(--color-white);
-  text-shadow: 3px 3px 0 var(--color-primary);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1;
   display: block;
+  margin-bottom: 1rem;
 }
 
-.model-points {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  flex-wrap: wrap;
+.model-point h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-black);
 }
 
-.point h3 {
-  color: var(--color-white);
-  font-size: 1.2rem;
+.model-point p {
+  color: var(--color-black);
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+.model-description {
+  background: var(--color-secondary);
+  padding: 2.5rem;
+  border-radius: 4px;
+}
+
+.model-description h4 {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-black);
+}
+
+.premium-list {
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
 
-.mt-5 { margin-top: 3rem; }
+.premium-list li {
+  padding: 0.75rem 0;
+  padding-left: 2rem;
+  position: relative;
+  color: var(--color-black);
+}
+
+.premium-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .model-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

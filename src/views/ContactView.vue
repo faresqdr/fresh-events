@@ -1,66 +1,6 @@
-<template>
-  <div class="contact-view">
-    <section class="contact-hero section-padding">
-      <div class="container grid-2">
-         <div class="hero-txt">
-            <h1>Marquons <br><span class="highlight">L'Histoire.</span></h1>
-            <p class="subtitle accent-font">Anticipation = Réussite.</p>
-            <div class="info-box">
-                <p><strong>HQ:</strong> 123 Avenue de l'Événement, Paris</p>
-                <p><strong>Tel:</strong> 01 23 45 67 89</p>
-                <p><strong>Mail:</strong> contact@fresh-events.fr</p>
-            </div>
-         </div>
-         <div class="form-wrapper">
-             <div class="paper-stack"></div>
-             <form class="brutalist-form" @submit.prevent="submitForm">
-                 <h2>Projet Info</h2>
-                 
-                 <div v-if="formStatus === 'success'" class="status-message success">
-                   {{ statusMessage }}
-                 </div>
-                 <div v-if="formStatus === 'error'" class="status-message error">
-                   {{ statusMessage }}
-                 </div>
-                 
-                 <div class="form-group">
-                     <label>Identité</label>
-                     <input type="text" v-model="form.name" placeholder="Nom & Prénom" required />
-                 </div>
-                 
-                 <div class="form-group">
-                     <label>Structure</label>
-                     <input type="text" v-model="form.company" placeholder="Société / Organisme" required />
-                 </div>
-                 
-                 <div class="form-row">
-                     <div class="form-group">
-                         <label>Email</label>
-                         <input type="email" v-model="form.email" placeholder="hello@world.com" required />
-                     </div>
-                     <div class="form-group">
-                         <label>Tel</label>
-                         <input type="tel" v-model="form.phone" placeholder="06..." required />
-                     </div>
-                 </div>
-
-                 <div class="form-group">
-                     <label>Le Pitch</label>
-                     <textarea rows="4" v-model="form.message" placeholder="Dites-nous tout..."></textarea>
-                 </div>
-
-                 <button type="submit" class="btn btn-primary full-width" :disabled="isLoading">
-                   {{ isLoading ? '⏳ Envoi en cours...' : 'Envoyer 🚀' }}
-                 </button>
-             </form>
-         </div>
-      </div>
-    </section>
-  </div>
-</template>
-
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
+import { gsap } from 'gsap'
 
 const form = reactive({
   name: '',
@@ -71,8 +11,13 @@ const form = reactive({
 })
 
 const isLoading = ref(false)
-const formStatus = ref(null) // 'success' or 'error'
+const formStatus = ref(null)
 const statusMessage = ref('')
+
+onMounted(() => {
+  // Animations disabled for immediate visibility
+  console.log('ContactView mounted - animations disabled for testing')
+})
 
 const submitForm = async () => {
   isLoading.value = true
@@ -98,7 +43,7 @@ const submitForm = async () => {
 
     if (response.ok) {
       formStatus.value = 'success'
-      statusMessage.value = `✅ Lead créé avec succès! (ID: ${data.leadId})`
+      statusMessage.value = `✓ Message envoyé avec succès! Nous vous recontacterons rapidement.`
       
       // Reset form
       form.name = ''
@@ -108,11 +53,11 @@ const submitForm = async () => {
       form.message = ''
     } else {
       formStatus.value = 'error'
-      statusMessage.value = `❌ Erreur: ${data.error}`
+      statusMessage.value = `Erreur lors de l'envoi. Veuillez réessayer.`
     }
   } catch (error) {
     formStatus.value = 'error'
-    statusMessage.value = `❌ Erreur de connexion au serveur: ${error.message}`
+    statusMessage.value = `Erreur de connexion. Veuillez vérifier votre connexion.`
     console.error('Form submission error:', error)
   } finally {
     isLoading.value = false
@@ -120,127 +65,331 @@ const submitForm = async () => {
 }
 </script>
 
+<template>
+  <div class="contact-view">
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary">
+      <div class="container text-center">
+        <p class="uppercase" style="color: rgba(255,255,255,0.8); font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 1.5rem;">Contact</p>
+        <h1 class="text-white">Écrivons <br><span class="accent-text">Votre Histoire</span></h1>
+        <div class="accent-line accent-line-center" style="background: rgba(255,255,255,0.3); margin: 2rem auto;"></div>
+        <p class="text-lg text-white" style="max-width: 700px; margin: 0 auto; opacity: 0.9;">
+          Chaque grand événement commence par une conversation. 
+          Partagez-nous votre projet, nous le transformerons en réussite.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section section-padding-lg">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <h3>Informations de Contact</h3>
+            <div class="accent-line"></div>
+            
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <div>
+                <h4>Adresse</h4>
+                <p>123 Avenue de l'Événement<br>75001 Paris, France</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+              </div>
+              <div>
+                <h4>Téléphone</h4>
+                <p><a href="tel:+33123456789">01 23 45 67 89</a></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h4>Email</h4>
+                <p><a href="mailto:contact@fresh-events.fr">contact@fresh-events.fr</a></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h4>Horaires</h4>
+                <p>Lun - Ven : 9h - 19h<br>Sam : 10h - 18h</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form">
+            <h3>Envoyez-nous un Message</h3>
+            <div class="accent-line"></div>
+
+            <form @submit.prevent="submitForm">
+              <div v-if="formStatus === 'success'" class="status-message success">
+                {{ statusMessage }}
+              </div>
+              <div v-if="formStatus === 'error'" class="status-message error">
+                {{ statusMessage }}
+              </div>
+
+              <div class="form-group">
+                <label for="name">Nom & Prénom *</label>
+                <input 
+                  type="text" 
+                  id="name"
+                  v-model="form.name" 
+                  placeholder="Jean Dupont" 
+                  required 
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="company">Société / Organisation *</label>
+                <input 
+                  type="text" 
+                  id="company"
+                  v-model="form.company" 
+                  placeholder="Votre entreprise" 
+                  required 
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Email *</label>
+                  <input 
+                    type="email" 
+                    id="email"
+                    v-model="form.email" 
+                    placeholder="contact@exemple.fr" 
+                    required 
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="phone">Téléphone *</label>
+                  <input 
+                    type="tel" 
+                    id="phone"
+                    v-model="form.phone" 
+                    placeholder="06 12 34 56 78" 
+                    required 
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="message">Votre Projet</label>
+                <textarea 
+                  id="message"
+                  rows="6" 
+                  v-model="form.message" 
+                  placeholder="Décrivez-nous votre projet, vos besoins, vos objectifs..."
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-large full-width" 
+                :disabled="isLoading"
+              >
+                {{ isLoading ? 'Envoi en cours...' : 'Envoyer le Message' }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <style scoped>
-.contact-hero {
-    background: var(--color-black);
-    color: var(--color-white);
-    min-height: 90vh;
-    display: flex;
-    align-items: center;
+.hero-section {
+  padding: clamp(6rem, 15vw, 10rem) 0;
 }
 
-.highlight { 
-    color: var(--color-primary); 
-    text-shadow: 4px 4px 0px var(--color-white);
+/* Contact Grid */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(3rem, 6vw, 6rem);
+  align-items: start;
 }
 
-.subtitle {
-    font-size: 2rem;
-    color: var(--color-secondary);
-    margin-bottom: 40px;
+.contact-info h3,
+.contact-form h3 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
-.info-box p {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    border-left: 3px solid var(--color-primary);
-    padding-left: 15px;
+/* Contact Info */
+.info-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.form-wrapper {
-    position: relative;
+.info-item:last-child {
+  border-bottom: none;
 }
 
-.paper-stack {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 100%;
-    height: 100%;
-    background: var(--color-secondary);
-    border: 3px solid var(--color-white);
-    z-index: 0;
+.info-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-secondary);
+  color: var(--color-accent);
+  border-radius: 50%;
 }
 
-.brutalist-form {
-    position: relative;
-    background: var(--color-white);
-    padding: 40px;
-    border: 3px solid var(--color-white);
-    color: var(--color-black);
-    z-index: 1;
-    transform: translate(-10px, -10px);
-    transition: transform 0.3s;
+.info-item h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-black);
 }
 
-.brutalist-form:hover {
-    transform: translate(0, 0);
+.info-item p {
+  color: var(--color-black);
+  opacity: 0.75;
+  line-height: 1.6;
+  margin: 0;
 }
 
-.brutalist-form h2 {
-    color: var(--color-black);
-    border-bottom: 3px solid var(--color-black);
-    padding-bottom: 10px;
-    margin-bottom: 30px;
+.info-item a {
+  color: var(--color-accent);
+  transition: all var(--transition-base);
 }
 
-.form-group { margin-bottom: 20px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.info-item a:hover {
+  color: var(--color-primary);
+}
+
+/* Contact Form */
+.contact-form {
+  background: var(--color-white);
+  padding: 3rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
 
 label {
-    display: block;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-    font-family: var(--font-heading);
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 15px;
-    background: #f0f0f0;
-    border: 2px solid var(--color-black);
-    font-family: var(--font-body);
-    font-size: 1rem;
-    transition: all 0.2s;
+input,
+textarea {
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  background: var(--color-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: all var(--transition-base);
+  color: var(--color-black);
 }
 
-input:focus, textarea:focus {
-    outline: none;
-    background: var(--color-white);
-    border-color: var(--color-primary);
-    box-shadow: 4px 4px 0px var(--color-primary);
+input:focus,
+textarea:focus {
+  outline: none;
+  background: var(--color-white);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
 }
 
-.full-width { width: 100%; }
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.full-width {
+  width: 100%;
+}
 
 .status-message {
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 3px solid var(--color-black);
-    font-weight: bold;
-    text-align: center;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
 }
 
 .status-message.success {
-    background: #e8f5e9;
-    color: #2e7d32;
-    border-color: #4caf50;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #4caf50;
 }
 
 .status-message.error {
-    background: #ffebee;
-    color: #c62828;
-    border-color: #f44336;
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #f44336;
 }
 
 button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-@media (max-width: 900px) {
-    .grid-2 { grid-template-columns: 1fr; }
-    .form-wrapper { margin-top: 50px; }
+/* Responsive */
+@media (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info {
+    order: 2;
+    margin-top: 3rem;
+  }
+
+  .contact-form {
+    order: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-form {
+    padding: 2rem 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
