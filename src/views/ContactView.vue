@@ -97,7 +97,7 @@ const submitForm = async () => {
               </div>
               <div>
                 <h4>Adresse</h4>
-                <p>123 Avenue de l'Événement<br>75001 Paris, France</p>
+                <p>105 rue des Thermes (Hôtel Saint Eloi)<br>57360 Amnéville<br>Le bureau est situé au sein de l’hôtel.</p>
               </div>
             </div>
 
@@ -109,7 +109,7 @@ const submitForm = async () => {
               </div>
               <div>
                 <h4>Téléphone</h4>
-                <p><a href="tel:+33123456789">01 23 45 67 89</a></p>
+                <p><a href="tel:+33372396481">03 72 39 64 81</a></p>
               </div>
             </div>
 

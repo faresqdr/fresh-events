@@ -42,8 +42,8 @@ const currentYear = new Date().getFullYear()
         <div class="footer-col">
           <h4>Contact</h4>
           <div class="footer-contact">
-            <p>123 Avenue de l'Événement<br>75001 Paris, France</p>
-            <p><a href="tel:+33123456789">01 23 45 67 89</a></p>
+            <p>105 rue des Thermes (Hôtel Saint Eloi)<br>57360 Amnéville<br>Le bureau est situé au sein de l’hôtel.</p>
+            <p><a href="tel:+33372396481">03 72 39 64 81</a></p>
             <p><a href="mailto:contact@fresh-events.fr">contact@fresh-events.fr</a></p>
           </div>
           <RouterLink to="/contact" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;">

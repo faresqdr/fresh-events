@@ -15,7 +15,7 @@ const router = createRouter({
             component: HomeView,
             meta: {
                 title: 'Fresh Events - Restauration Événémentielle & Séminaires à Amnéville',
-                description: 'Expert en restauration événémentielle à Amnéville. Séminaires, événements d\'entreprise, food services. 10+ ans d\'expérience, conforme HACCP.'
+                description: 'Expert en restauration événémentielle à Amnéville. Séminaires, événements d\'entreprise, food services. 11 ans d\'expertise, conforme HACCP.'
             }
         },
         {
@@ -41,7 +41,7 @@ const router = createRouter({
             name: 'expertise',
             component: ExpertiseView,
             meta: {
-                title: '10 Ans d\'Expertise en Restauration Événémentielle | Fresh Events',
+                title: '11 Ans d\'Expertise en Restauration Événémentielle | Fresh Events',
                 description: 'Découvrez notre expérience, nos certifications HACCP et notre support terrain 24/7 pour tous vos événements.'
             }
         },
@@ -76,7 +76,7 @@ const router = createRouter({
 // Update document title and meta description on route change
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title || 'Fresh Events'
-    
+
     // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]')
     if (!metaDescription) {
@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
         document.head.appendChild(metaDescription)
     }
     metaDescription.content = to.meta.description || 'Fresh Events - Restauration événémentielle premium à Amnéville'
-    
+
     next()
 })
 

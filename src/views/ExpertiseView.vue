@@ -17,7 +17,7 @@ onMounted(() => {
     <section class="hero-section bg-primary">
       <div class="container text-center">
         <p class="uppercase" style="color: rgba(255,255,255,0.8); font-size: 0.85rem; letter-spacing: 0.15em; margin-bottom: 1.5rem;">Savoir-Faire</p>
-        <h1 class="text-white"><span class="accent-text">15 Années</span> <br>d'Excellence Opérationnelle</h1>
+        <h1 class="text-white"><span class="accent-text">11 ans</span> <br>d'Excellence Opérationnelle</h1>
         <div class="accent-line accent-line-center" style="background: rgba(255,255,255,0.3); margin: 2rem auto;"></div>
         <p class="text-lg text-white" style="max-width: 700px; margin: 0 auto; opacity: 0.9;">
           Fiabilité industrielle et attention artisanale. Notre expertise transforme 
@@ -31,17 +31,17 @@ onMounted(() => {
       <div class="container">
         <div class="xp-grid grid-3">
           <div class="xp-card">
-            <div class="xp-number accent-color">15+</div>
-            <h3>Années d'Expérience</h3>
+            <div class="xp-number accent-color">11</div>
+            <h3>Ans d'Expertise</h3>
             <p>Une expertise éprouvée sur tous types d'événements et de volumes.</p>
           </div>
           <div class="xp-card">
-            <div class="xp-number accent-color">100%</div>
-            <h3>Conformité HACCP</h3>
+            <div class="xp-number accent-color">HACCP</div>
+            <h3>Conformité Sanitaire</h3>
             <p>Respect absolu des normes sanitaires et de traçabilité alimentaire.</p>
           </div>
           <div class="xp-card">
-            <div class="xp-number accent-color">24/7</div>
+            <div class="xp-number accent-color">Terrain</div>
             <h3>Support Terrain</h3>
             <p>Disponibilité et réactivité permanentes pour vos événements.</p>
           </div>

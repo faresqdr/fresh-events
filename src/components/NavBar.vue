@@ -117,14 +117,14 @@ onUnmounted(() => {
 }
 
 .nav-logo {
-  height: 75px;
+  height: 120px;
   width: auto;
   object-fit: contain;
   transition: all var(--transition-base);
 }
 
 .navbar.scrolled .nav-logo {
-  height: 60px;
+  height: 96px;
 }
 
 .nav-links {
@@ -290,11 +290,11 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .nav-logo {
-    height: 60px;
+    height: 72px;
   }
 
   .navbar.scrolled .nav-logo {
-    height: 50px;
+    height: 60px;
   }
 
   .nav-link-mobile {

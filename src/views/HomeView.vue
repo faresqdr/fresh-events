@@ -80,20 +80,20 @@ onMounted(() => {
       <div class="container">
         <div class="stats-grid">
           <div class="stat-item">
-            <span class="stat-number">500+</span>
-            <span class="stat-label">Événements</span>
+            <span class="stat-number">Sur mesure</span>
+            <span class="stat-label">Événements professionnels</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">100K+</span>
-            <span class="stat-label">Convives Servis</span>
+            <span class="stat-number">Service fluide</span>
+            <span class="stat-label">Expérience convive</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">15+</span>
+            <span class="stat-number">11 ans</span>
             <span class="stat-label">Années d'Expertise</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">100%</span>
-            <span class="stat-label">Clé en Main</span>
+            <span class="stat-number">Clé en main</span>
+            <span class="stat-label">Accompagnement complet</span>
           </div>
         </div>
       </div>
@@ -166,7 +166,7 @@ onMounted(() => {
             </div>
             <h3>Gestion des Flux</h3>
             <p>
-              De 500 à 5000 personnes, nos processus éprouvés absorbent les volumes 
+              Nos processus éprouvés absorbent les volumes 
               sans compromis sur la qualité.
             </p>
           </div>

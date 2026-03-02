@@ -62,8 +62,8 @@ onMounted(() => {
             <h2>Maîtrise des Flux</h2>
             <div class="accent-line"></div>
             <p class="text-lg">
-              Servir 5000 personnes en une heure ? Notre expertise opérationnelle 
-              transforme ce défi en routine parfaitement orchestrée.
+              Notre expertise opérationnelle transforme les fortes affluences 
+              en routine parfaitement orchestrée.
             </p>
             <ul class="feature-list">
               <li>Processus optimisés</li>
