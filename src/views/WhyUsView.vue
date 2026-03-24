@@ -32,7 +32,7 @@ onMounted(() => {
         <div class="feature-row">
           <div class="feature-visual">
             <div class="img-container">
-              <img src="https://picsum.photos/seed/teamwork/600/500" alt="Équipe professionnelle" class="img-premium" />
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&h=500&q=80" alt="Équipe professionnelle" class="img-premium" />
             </div>
           </div>
           <div class="feature-content">
@@ -54,7 +54,7 @@ onMounted(() => {
         <div class="feature-row reverse">
           <div class="feature-visual">
             <div class="img-container">
-              <img src="https://picsum.photos/seed/fast-action/600/500" alt="Gestion des flux" class="img-premium" />
+              <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&h=500&q=80" alt="Gestion des flux" class="img-premium" />
             </div>
           </div>
           <div class="feature-content">
@@ -76,7 +76,7 @@ onMounted(() => {
         <div class="feature-row">
           <div class="feature-visual">
             <div class="img-container">
-              <img src="https://picsum.photos/seed/flexibility/600/500" alt="Adaptabilité" class="img-premium" />
+              <img src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=600&h=500&q=80" alt="Adaptabilité" class="img-premium" />
             </div>
           </div>
           <div class="feature-content">

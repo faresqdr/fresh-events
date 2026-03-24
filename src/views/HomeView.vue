@@ -61,8 +61,8 @@ onMounted(() => {
           <div class="hero-visual">
             <div class="hero-image-container">
               <img 
-                src="https://picsum.photos/seed/premium-event/700/800" 
-                alt="Fresh Events Excellence" 
+                src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=700&h=800&q=80"
+                alt="Fresh Events Excellence"
                 class="hero-image img-premium"
               />
               <div class="floating-accent">
@@ -106,8 +106,8 @@ onMounted(() => {
           <div class="value-visual">
             <div class="img-container parallax-section">
               <img 
-                src="https://picsum.photos/seed/excellence/700/500" 
-                alt="Excellence opérationnelle" 
+                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=700&h=500&q=80"
+                alt="Excellence opérationnelle"
                 class="img-premium parallax-img"
               />
             </div>
@@ -190,8 +190,8 @@ onMounted(() => {
     <section class="visual-break parallax-section">
       <div class="visual-overlay"></div>
       <img 
-        src="https://picsum.photos/seed/event-large/1600/600" 
-        alt="Fresh Events en action" 
+        src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1600&h=600&q=80"
+        alt="Fresh Events en action"
         class="parallax-img"
       />
       <div class="visual-content">

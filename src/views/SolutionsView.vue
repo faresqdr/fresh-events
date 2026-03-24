@@ -57,7 +57,7 @@ onMounted(() => {
           </div>
           <div class="solution-visual">
             <div class="img-container">
-              <img src="https://picsum.photos/seed/festival/700/600" alt="Festival" class="img-premium" />
+              <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=700&h=600&q=80" alt="Festival" class="img-premium" />
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@ onMounted(() => {
         <div class="grid-2">
           <div class="solution-visual order-desktop-1">
 <div class="img-container">
-              <img src="https://picsum.photos/seed/corporate-business/700/600" alt="Corporate" class="img-premium" />
+              <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=700&h=600&q=80" alt="Corporate" class="img-premium" />
             </div>
           </div>
           <div class="solution-content order-desktop-2">
@@ -133,7 +133,7 @@ onMounted(() => {
           </div>
           <div class="solution-visual">
             <div class="img-container">
-              <img src="https://picsum.photos/seed/party-celebration/700/600" alt="Loisirs" class="img-premium" />
+              <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=700&h=600&q=80" alt="Loisirs" class="img-premium" />
             </div>
           </div>
         </div>

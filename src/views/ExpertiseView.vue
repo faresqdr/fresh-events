@@ -71,7 +71,7 @@ onMounted(() => {
           </div>
           <div class="culture-visual">
             <div class="img-container">
-              <img src="https://picsum.photos/seed/food-kitchen/700/600" alt="Cuisine professionnelle" class="img-premium" />
+              <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=700&h=600&q=80" alt="Cuisine professionnelle" class="img-premium" />
             </div>
           </div>
         </div>
