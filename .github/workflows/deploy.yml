@@ -1,0 +1,33 @@
+name: Deploy fresh-events
+
+# Auto-deploy the static site whenever `main` changes. Runs on the fresh-events
+# self-hosted runner (on the server), which pulls and rebuilds. Caddy serves
+# ./dist directly, so the new build is live as soon as it finishes — no restart.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-fresh-events
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, fresh-events]
+    steps:
+      - name: Update checkout + rebuild
+        run: |
+          set -euo pipefail
+          cd /var/www/fresh-events
+          git fetch --prune origin main
+          git reset --hard origin/main
+          npm ci
+          npm run build
+
+      - name: Health check
+        run: |
+          sleep 3
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 https://fresh-events.fr/)
+          echo "fresh-events.fr -> $code"
+          case "$code" in 2*) ;; *) echo "FAILED"; exit 1;; esac
