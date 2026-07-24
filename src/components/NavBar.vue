@@ -59,7 +59,8 @@ onUnmounted(() => {
           <RouterLink to="/pourquoi-fresh-events" class="nav-link">Pourquoi Nous</RouterLink>
           <RouterLink to="/savoir-faire" class="nav-link">Savoir-Faire</RouterLink>
           <RouterLink to="/solutions" class="nav-link">Solutions</RouterLink>
-          <RouterLink to="/contact" class="btn btn-primary nav-cta">Contact</RouterLink>
+          <RouterLink to="/contact" class="nav-link">Contact</RouterLink>
+          <RouterLink to="/devis" class="nav-devis-btn">Devis gratuit →</RouterLink>
         </nav>
       </div>
     </div>
@@ -68,12 +69,13 @@ onUnmounted(() => {
     <Transition name="mobile-menu">
       <div v-if="isMenuOpen" class="mobile-menu-overlay" @click="toggleMenu">
         <nav class="nav-links-mobile" @click.stop>
+          <RouterLink to="/devis" @click="toggleMenu" class="nav-devis-mobile">✦ Devis gratuit en ligne →</RouterLink>
           <RouterLink to="/" @click="toggleMenu" class="nav-link-mobile">Accueil</RouterLink>
           <RouterLink to="/offre" @click="toggleMenu" class="nav-link-mobile">Notre Offre</RouterLink>
           <RouterLink to="/pourquoi-fresh-events" @click="toggleMenu" class="nav-link-mobile">Pourquoi Nous</RouterLink>
           <RouterLink to="/savoir-faire" @click="toggleMenu" class="nav-link-mobile">Savoir-Faire</RouterLink>
           <RouterLink to="/solutions" @click="toggleMenu" class="nav-link-mobile">Solutions</RouterLink>
-          <RouterLink to="/contact" @click="toggleMenu" class="btn btn-primary btn-large nav-cta-mobile">Contact</RouterLink>
+          <RouterLink to="/contact" @click="toggleMenu" class="nav-link-mobile">Contact</RouterLink>
         </nav>
       </div>
     </Transition>
@@ -176,6 +178,42 @@ onUnmounted(() => {
   font-size: 0.9rem;
   margin-left: 1rem;
 }
+
+/* Devis CTA — bouton mis en avant dans la nav */
+.nav-devis-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 1.25rem;
+  padding: 0.7rem 1.4rem;
+  background: var(--color-accent);
+  color: #fff !important;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  white-space: nowrap;
+}
+.nav-devis-btn:hover { background: var(--color-primary); transform: translateY(-1px); }
+.nav-devis-btn.router-link-active { background: var(--color-primary); }
+
+/* Mobile devis block */
+.nav-devis-mobile {
+  display: block;
+  background: var(--color-accent);
+  color: #fff !important;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+.nav-devis-mobile:hover { background: var(--color-primary); padding-left: 1.25rem; }
 
 .menu-toggle {
   display: none;

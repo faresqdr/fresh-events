@@ -25,7 +25,7 @@ const submitForm = async () => {
   statusMessage.value = ''
 
   try {
-    const response = await fetch('http://localhost:3001/api/create-lead', {
+    const response = await fetch('/fresh-events/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

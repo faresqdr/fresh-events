@@ -6,19 +6,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const partners = [
-  { name: 'Zoo d\'Amnéville', logo: '/logos/partners/zoo_amneville.png', url: 'https://www.zoo-amneville.com' },
   { name: 'Arcelor Mittal', logo: '/logos/partners/arcelor-mittal.png', url: 'https://www.arcelormittal.com' },
-  { name: 'Seven Casino', logo: '/logos/partners/casino.png', url: 'https://www.seven-casino.fr' },
+  { name: 'Seven Casino', logo: '/logos/partners/casino.png', url: 'https://www.seven-casino.com' },
   { name: 'Golden Tulip', logo: '/logos/partners/golden-tulip.png', url: 'https://www.goldentulip.com' },
-  { name: 'Le Galaxie', logo: '/logos/partners/galaxie.png', url: 'https://www.legaxie.fr'},
+  { name: 'Le Galaxie', logo: '/logos/partners/galaxie.png', url: 'https://www.le-galaxie.com'},
   { name: 'Moselle', logo: '/logos/partners/moselle.png', url: 'https://www.moselle.fr' },
   { name: 'GRDF', logo: '/logos/partners/grdf.png', url: 'https://www.grdf.fr' },
-  { name: 'France Judo', logo: '/logos/partners/france-judo.png', url: 'https://www.ffjudo.fr' },
+  { name: 'France Judo', logo: '/logos/partners/france-judo.png', url: 'https://www.ffjudo.com' },
   { name: 'Socotec', logo: '/logos/partners/socotec.png', url: 'https://www.socotec.fr' },
   { name: 'Équatour', logo: '/logos/partners/equatour.png', url: 'https://www.equatour.fr' },
   { name: 'Renault', logo: '/logos/partners/renault.png', url: 'https://www.renault.fr' },
   { name: 'Séminaire Amnéville', logo: '/logos/partners/seminaire-amneville.png', url: 'https://www.seminaire-amneville.com' },
-  { name: 'Car Avenue', logo: '/logos/partners/peugeot.png', url: 'https://www.caravenue.fr' },
+  { name: 'Car Avenue', logo: '/logos/partners/peugeot.png', url: 'https://concessions.peugeot.fr/yutz/' },
   { name: 'Mondelez International', logo: '/logos/partners/mondelez.png', url: 'https://www.mondelezinternational.com' }
 ]
 
@@ -39,22 +38,23 @@ onMounted(() => {
       <div class="container">
         <div class="hero-content-wrapper">
           <div class="hero-text">
-            <p class="hero-pretitle uppercase accent-color">Restauration événementielle</p>
+            <p class="hero-pretitle uppercase accent-color">Traiteur événementiel · Moselle · Luxembourg</p>
             <h1 class="hero-title">
               <span class="hero-title-line">Excellence</span>
               <span class="hero-title-line">Opérationnelle.</span>
               <span class="hero-title-line accent-text">Sans Compromis.</span>
             </h1>
             <p class="hero-subtitle text-lg">
-              Transformez vos événements en expériences mémorables avec une restauration 
-              maîtrisée de bout en bout.
+              Séminaire, mariage, cocktail, festival — obtenez votre prix en temps réel
+              et recevez un devis personnalisé <strong style="color:var(--color-accent)">sous 24h</strong>.
             </p>
-            <p class="hero-description">
-              Nous prenons le contrôle total : de la logistique au staff, en passant par l'encaissement. 
-              Zéro contrainte pour vous, expérience exceptionnelle pour vos invités.
-            </p>
+            <div class="hero-devis-strip">
+              <span class="hero-devis-tag">✓ Gratuit</span>
+              <span class="hero-devis-tag">✓ Sans engagement</span>
+              <span class="hero-devis-tag">✓ Prix HT & TTC instantanés</span>
+            </div>
             <div class="hero-actions">
-              <RouterLink to="/contact" class="btn btn-primary btn-large hero-btn">Commencer</RouterLink>
+              <RouterLink to="/devis" class="btn btn-accent btn-large hero-btn hero-btn--primary">Créer mon devis →</RouterLink>
               <RouterLink to="/offre" class="btn btn-secondary btn-large hero-btn">Découvrir</RouterLink>
             </div>
           </div>
@@ -94,6 +94,46 @@ onMounted(() => {
           <div class="stat-item">
             <span class="stat-number">Clé en main</span>
             <span class="stat-label">Accompagnement complet</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Devis en ligne — section mise en avant -->
+    <section class="devis-cta-section">
+      <div class="container">
+        <div class="devis-cta-inner">
+          <div class="devis-cta-text">
+            <p class="devis-cta-eyebrow">Moselle · Grand Est · Luxembourg</p>
+            <h2 class="devis-cta-title">Votre devis traiteur<br><span class="accent-text">en 4 minutes chrono</span></h2>
+            <p class="devis-cta-sub">
+              Séminaire, cocktail, mariage, anniversaire, festival — composez votre menu,
+              choisissez vos prestations et obtenez le prix <strong>HT et TTC en temps réel</strong>.
+              Moselle, Grand Est et Grand-Duché de Luxembourg. Notre équipe vous répond sous 24h.
+            </p>
+            <div class="devis-cta-pills">
+              <span class="devis-pill">💼 Séminaire</span>
+              <span class="devis-pill">🥂 Cocktail</span>
+              <span class="devis-pill">💐 Mariage</span>
+              <span class="devis-pill">🎉 Anniversaire</span>
+              <span class="devis-pill">🎪 Festival</span>
+            </div>
+          </div>
+          <div class="devis-cta-card">
+            <div class="devis-card-steps">
+              <div class="devis-step"><span class="devis-step-num">1</span><span>Type d'événement</span></div>
+              <div class="devis-step"><span class="devis-step-num">2</span><span>Date, lieu &amp; convives</span></div>
+              <div class="devis-step"><span class="devis-step-num">3</span><span>Formule ou menu libre</span></div>
+              <div class="devis-step"><span class="devis-step-num">4</span><span>Vos coordonnées</span></div>
+            </div>
+            <div class="devis-card-price-preview">
+              <span class="devis-price-label">Prix affichés en temps réel</span>
+              <span class="devis-price-example">à partir de <strong>4,50 €</strong> TTC / pers.</span>
+            </div>
+            <RouterLink to="/devis" class="btn btn-primary btn-large devis-card-btn">
+              Créer mon devis gratuit →
+            </RouterLink>
+            <p class="devis-card-note">Gratuit · Sans engagement · Réponse sous 24h</p>
           </div>
         </div>
       </div>
@@ -233,12 +273,19 @@ onMounted(() => {
     <!-- CTA Section -->
     <section class="cta-section bg-primary section-padding-lg">
       <div class="container-narrow text-center">
-        <h2 class="text-white">Prêt à Transformer Vos Événements ?</h2>
+        <h2 class="text-white">Un événement en Moselle, Grand Est ou au Luxembourg ?</h2>
         <div class="accent-line accent-line-center" style="background: rgba(255,255,255,0.3);"></div>
-        <p class="text-white text-lg" style="margin-bottom: 3rem;">
-          Discutons de vos besoins et construisons ensemble une solution sur mesure.
+        <p class="text-white text-lg" style="margin-bottom: 1.5rem;">
+          Obtenez une estimation de prix <strong>en temps réel</strong> — composez votre menu
+          et recevez un devis personnalisé sous 24h.
         </p>
-        <RouterLink to="/contact" class="btn btn-outline-white btn-large">Nous Contacter</RouterLink>
+        <p class="text-white" style="margin-bottom: 3rem; opacity: 0.8; font-size: 0.95rem;">
+          Amnéville · Metz · Thionville · Nancy · Luxembourg-Ville · Esch-sur-Alzette
+        </p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+          <RouterLink to="/devis" class="btn btn-outline-white btn-large">Faire mon devis en ligne →</RouterLink>
+          <RouterLink to="/contact" class="btn btn-outline-white btn-large" style="opacity:0.7">Nous contacter</RouterLink>
+        </div>
       </div>
     </section>
   </div>
@@ -269,6 +316,37 @@ onMounted(() => {
   font-weight: 600;
   margin-bottom: 1.5rem;
   display: inline-block;
+}
+
+/* Devis strip sous le subtitle */
+.hero-devis-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 1.75rem;
+}
+.hero-devis-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: rgba(74,124,89,0.1);
+  border: 1px solid rgba(74,124,89,0.2);
+  padding: 0.3rem 0.75rem;
+}
+
+/* Bouton devis accent */
+.btn-accent {
+  background: var(--color-accent);
+  color: #fff;
+  border: 2px solid var(--color-accent);
+}
+.btn-accent:hover { background: var(--color-primary); border-color: var(--color-primary); }
+
+.hero-btn--primary {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 18px rgba(74,124,89,0.35);
 }
 
 .hero-title {
@@ -605,6 +683,139 @@ onMounted(() => {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
+}
+
+/* ── Section devis en ligne ────────────────────────────────────────────────── */
+.devis-cta-section {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1a4a2a 100%);
+  padding: clamp(3.5rem, 8vw, 6rem) 0;
+}
+
+.devis-cta-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.devis-cta-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 1rem;
+}
+
+.devis-cta-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  color: var(--color-white);
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.devis-cta-sub {
+  color: rgba(255,255,255,0.82);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
+}
+
+.devis-cta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.devis-pill {
+  font-size: 0.8rem;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.35rem 0.85rem;
+  white-space: nowrap;
+}
+
+.devis-cta-card {
+  background: var(--color-white);
+  padding: 2.25rem 2rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.devis-card-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.devis-step {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.9rem;
+  color: var(--color-black);
+}
+
+.devis-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.devis-card-price-preview {
+  background: var(--color-secondary);
+  border-left: 3px solid var(--color-accent);
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.devis-price-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.55;
+  font-weight: 600;
+}
+
+.devis-price-example {
+  font-size: 1rem;
+  color: var(--color-primary);
+}
+
+.devis-price-example strong {
+  font-size: 1.25rem;
+  color: var(--color-accent);
+}
+
+.devis-card-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+  padding: 1rem 1.5rem;
+}
+
+.devis-card-note {
+  text-align: center;
+  font-size: 0.77rem;
+  opacity: 0.45;
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .devis-cta-inner { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
