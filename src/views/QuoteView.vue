@@ -111,6 +111,26 @@ function setDishQty(id, val) {
   else dishQuantities[id] = n
 }
 
+// Enrichissements de la formule — choix binaire, pas de quantité : l'option
+// s'applique à toute la formule et son prix est un tarif par personne.
+// Clé = id de la ligne de supplément (pas l'id produit : le même produit peut
+// avoir un prix différent selon la formule).
+const selectedSupplements = ref([])
+
+function toggleSupplement(id) {
+  const idx = selectedSupplements.value.indexOf(id)
+  if (idx === -1) selectedSupplements.value.push(id)
+  else selectedSupplements.value.splice(idx, 1)
+}
+
+function isSupplementSelected(id) {
+  return selectedSupplements.value.includes(id)
+}
+
+function clearSupplements() {
+  selectedSupplements.value = []
+}
+
 const contact = reactive({
   name: '', company: '', email: '', phone: '', message: '',
 })
@@ -211,6 +231,25 @@ const alacarteTotalTTC = computed(() =>
   selectedAlacarteObjs.value.reduce((sum, p) => sum + (p.price_ttc || p.price) * (alacarteQuantities[p.id] || 0), 0)
 )
 
+// ── Enrichissements de la formule sélectionnée ───────────────────────────────
+// Le prix vient d'Odoo, propre au couple (formule, produit).
+
+const formuleSupplements = computed(() =>
+  selectedFormuleObj.value?.supplements || []
+)
+
+const selectedSupplementObjs = computed(() =>
+  formuleSupplements.value.filter(s => selectedSupplements.value.includes(s.id))
+)
+
+// Tarif par personne × nombre de convives — comme la formule elle-même
+const supplementsTotal = computed(() =>
+  selectedSupplementObjs.value.reduce((sum, s) => sum + s.price, 0) * event.guests
+)
+const supplementsTotalTTC = computed(() =>
+  selectedSupplementObjs.value.reduce((sum, s) => sum + (s.price_ttc || s.price), 0) * event.guests
+)
+
 const servicesTotal = computed(() =>
   selectedServiceObjs.value.reduce((sum, p) => sum + p.price, 0)
 )
@@ -219,11 +258,11 @@ const servicesTotalTTC = computed(() =>
 )
 
 const grandTotal = computed(() => {
-  if (selectionMode.value === 'formule') return formuleTotal.value + servicesTotal.value
+  if (selectionMode.value === 'formule') return formuleTotal.value + supplementsTotal.value + servicesTotal.value
   return alacarteTotal.value + servicesTotal.value
 })
 const grandTotalTTC = computed(() => {
-  if (selectionMode.value === 'formule') return formuleTotalTTC.value + servicesTotalTTC.value
+  if (selectionMode.value === 'formule') return formuleTotalTTC.value + supplementsTotalTTC.value + servicesTotalTTC.value
   return alacarteTotalTTC.value + servicesTotalTTC.value
 })
 
@@ -272,18 +311,25 @@ async function fetchProducts() {
 
 function switchFormule(id) {
   if (selectedFormule.value === id) return
-  if (Object.keys(dishQuantities).length > 0) {
-    if (!window.confirm('Vous avez déjà réparti des plats. Changer de formule effacera ces choix. Continuer ?')) return
+  // Les suppléments sont propres à une formule : ils ne survivent pas au changement
+  const aDesChoix = Object.keys(dishQuantities).length > 0
+    || selectedSupplements.value.length > 0
+  if (aDesChoix) {
+    if (!window.confirm('Vous avez déjà personnalisé cette formule. Changer de formule effacera ces choix. Continuer ?')) return
     Object.keys(dishQuantities).forEach(k => delete dishQuantities[k])
+    clearSupplements()
   }
   selectedFormule.value = id
 }
 
 function switchMode(mode) {
   if (selectionMode.value === mode) return
-  if (selectionMode.value === 'formule' && Object.keys(dishQuantities).length > 0) {
-    if (!window.confirm('Vous avez réparti des plats dans la formule. Passer en composition libre effacera ces choix. Continuer ?')) return
+  const aDesChoix = Object.keys(dishQuantities).length > 0
+    || selectedSupplements.value.length > 0
+  if (selectionMode.value === 'formule' && aDesChoix) {
+    if (!window.confirm('Vous avez personnalisé votre formule. Passer en composition libre effacera ces choix. Continuer ?')) return
     Object.keys(dishQuantities).forEach(k => delete dishQuantities[k])
+    clearSupplements()
   }
   selectionMode.value = mode
 }
@@ -324,6 +370,12 @@ async function submitQuote() {
     for (const [idStr, qty] of Object.entries(dishQuantities)) {
       if (qty > 0) lines.push({ product_id: parseInt(idStr), quantity: qty, price: 0 })
     }
+    // Enrichissements : on envoie l'id de la ligne — prix ET quantité (= nombre
+    // de convives, car le tarif est par personne) sont relus côté Odoo.
+    selectedSupplementObjs.value.forEach(s => lines.push({
+      supplement_id: s.id, product_id: s.product_id,
+      quantity: event.guests, price: s.price,
+    }))
     selectedServiceObjs.value.forEach(s => lines.push({ product_id: s.id, quantity: 1, price: s.price }))
   } else {
     for (const [idStr, qty] of Object.entries(alacarteQuantities)) {
@@ -716,6 +768,50 @@ onMounted(() => {
                     </div>
                   </div>
 
+                  <!-- Enrichir la formule — suppléments payants définis dans Odoo -->
+                  <div v-if="selectedFormule === p.id && (p.supplements || []).length > 0"
+                       class="supp-panel">
+                    <div class="supp-panel-header">
+                      <span class="supp-icon">✚</span>
+                      <span>Enrichir ma formule</span>
+                      <span class="dish-optional-tag">Optionnel</span>
+                    </div>
+                    <div class="supp-panel-body">
+                      <p class="dish-panel-intro">
+                        Ajoutez des options à votre formule.
+                      </p>
+                      <button v-for="s in p.supplements" :key="s.id" type="button"
+                              class="supp-row"
+                              :class="{ active: isSupplementSelected(s.id) }"
+                              @click="toggleSupplement(s.id)">
+                        <span class="supp-check" :class="{ on: isSupplementSelected(s.id) }">
+                          <span v-if="isSupplementSelected(s.id)">✓</span>
+                        </span>
+                        <span class="supp-row-left">
+                          <span class="supp-row-img" v-if="s.image">
+                            <img :src="s.image" :alt="s.name" />
+                          </span>
+                          <span class="supp-row-txt">
+                            <span class="supp-row-name">{{ s.name }}</span>
+                            <span v-if="s.description" class="supp-row-desc">{{ s.description }}</span>
+                          </span>
+                        </span>
+                        <span class="supp-row-right">
+                          <span class="supp-row-price">
+                            + {{ fmt(s.price_ttc || s.price) }}
+                          </span>
+                          <span class="supp-row-sub" v-if="isSupplementSelected(s.id)">
+                            {{ fmt((s.price_ttc || s.price) * event.guests) }} au total
+                          </span>
+                        </span>
+                      </button>
+                      <div v-if="supplementsTotalTTC > 0" class="supp-total">
+                        Suppléments : <strong>+ {{ fmt(supplementsTotalTTC) }} TTC</strong>
+                        <span class="subtotal-ht">({{ fmt(supplementsTotal) }} HT)</span>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
@@ -744,6 +840,13 @@ onMounted(() => {
                     <span class="total-line-amounts">
                       <span class="amount-ht">{{ fmt(formuleTotal) }} HT</span>
                       <span class="amount-ttc">{{ fmt(formuleTotalTTC) }} TTC</span>
+                    </span>
+                  </div>
+                  <div class="total-line" v-for="s in selectedSupplementObjs" :key="'supp-' + s.id">
+                    <span>Supplément {{ s.name }} × {{ event.guests }} pers.</span>
+                    <span class="total-line-amounts">
+                      <span class="amount-ht">{{ fmt(s.price * event.guests) }} HT</span>
+                      <span class="amount-ttc">{{ fmt((s.price_ttc || s.price) * event.guests) }} TTC</span>
                     </span>
                   </div>
                   <div class="total-line" v-for="s in selectedServiceObjs" :key="s.id">
@@ -1170,7 +1273,6 @@ textarea { resize: vertical; min-height: 110px; }
   flex-direction: column;
   border: 1.5px solid rgba(0,0,0,0.08);
   background: var(--color-secondary);
-  overflow: hidden;
   transition: all var(--transition-fast);
 }
 
@@ -1220,16 +1322,16 @@ textarea { resize: vertical; min-height: 110px; }
 .menu-card-price small { font-size: 0.7rem; font-weight: 400; opacity: 0.7; }
 .menu-card-ht { display: block; font-size: 0.7rem; font-weight: 400; opacity: 0.5; }
 
-.menu-card-ctrl { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.menu-card-ctrl { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; min-width: 0; }
 
 .menu-card-subtotal { font-size: 0.8rem; color: var(--color-primary); margin-top: 0.25rem; }
 .menu-card-subtotal .subtotal-ht { opacity: 0.55; font-size: 0.75rem; margin-left: 0.25rem; }
 
 /* ── Qty controls ──────────────────────────────────────────────────────────── */
-.qty-main { display: flex; align-items: center; flex-shrink: 0; }
+.qty-main { display: flex; align-items: center; flex-shrink: 0; max-width: 100%; }
 
 .qty-btn {
-  width: 34px; height: 34px;
+  width: 32px; height: 32px;
   background: var(--color-primary); color: var(--color-white);
   border: none; font-size: 1.15rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
@@ -1239,10 +1341,10 @@ textarea { resize: vertical; min-height: 110px; }
 .qty-btn:hover:not(:disabled) { background: var(--color-accent); }
 .qty-btn:disabled { opacity: 0.25; cursor: not-allowed; }
 
-.qty-btn--sm { width: 30px; height: 30px; font-size: 1rem; }
+.qty-btn--sm { width: 28px; height: 28px; font-size: 1rem; }
 
 .qty-input {
-  width: 56px; height: 34px;
+  width: 44px; height: 32px;
   text-align: center; font-size: 1rem; font-weight: 700;
   color: var(--color-primary); background: var(--color-white);
   border: 1px solid rgba(0,0,0,0.1); border-left: none; border-right: none;
@@ -1252,7 +1354,7 @@ textarea { resize: vertical; min-height: 110px; }
 .qty-input::-webkit-inner-spin-button, .qty-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .qty-input:focus { outline: none; background: #f0f7f1; }
 
-.qty-input--sm { width: 48px; height: 30px; font-size: 0.9rem; }
+.qty-input--sm { width: 38px; height: 28px; font-size: 0.9rem; }
 
 .qty-presets { display: flex; gap: 0.35rem; flex-wrap: wrap; }
 
@@ -1327,7 +1429,45 @@ textarea { resize: vertical; min-height: 110px; }
 .dish-row-img img { width: 100%; height: 100%; object-fit: cover; }
 .dish-row-name { font-size: 0.9rem; color: var(--color-black); }
 .dish-row.active .dish-row-name { font-weight: 600; color: var(--color-primary); }
-.dish-row-ctrl { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; flex-shrink: 0; }
+.dish-row-ctrl { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; flex-shrink: 0; min-width: 0; }
+
+/* ── Enrichir la formule (suppléments payants) ──────────────────────────────── */
+.supp-panel { border: 1.5px solid rgba(0,0,0,0.08); border-top: 2px solid rgba(74,124,89,0.3); background: var(--color-white); margin-top: 0.5rem; }
+.supp-panel-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1.4rem; background: rgba(74,124,89,0.05); border-bottom: 1px solid rgba(0,0,0,0.07); font-weight: 600; font-size: 0.9rem; color: var(--color-primary); }
+.supp-icon { font-size: 1rem; line-height: 1; color: var(--color-accent); }
+.supp-panel-body { padding: 1.25rem 1.4rem 1.5rem; }
+/* Ligne = bouton cliquable (choix binaire, pas de quantité) */
+.supp-row {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem; padding: 0.7rem 0.9rem; margin-bottom: 0.5rem;
+  border: 1.5px solid rgba(0,0,0,0.06); background: var(--color-secondary);
+  font-family: var(--font-body); text-align: left; cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.supp-row:last-of-type { margin-bottom: 0; }
+.supp-row:hover { border-color: var(--color-accent); }
+.supp-row.active { border-color: var(--color-accent); background: rgba(74,124,89,0.04); }
+.supp-check {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 1.5px solid rgba(0,0,0,0.18); background: var(--color-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: var(--color-white);
+  transition: all var(--transition-fast);
+}
+.supp-check.on { background: var(--color-accent); border-color: var(--color-accent); }
+.supp-row-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0; }
+.supp-row-img { display: block; width: 40px; height: 40px; flex-shrink: 0; overflow: hidden; }
+.supp-row-img img { width: 100%; height: 100%; object-fit: cover; }
+.supp-row-txt { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.supp-row-name { font-size: 0.9rem; color: var(--color-black); }
+.supp-row.active .supp-row-name { font-weight: 600; color: var(--color-primary); }
+.supp-row-desc { font-size: 0.76rem; opacity: 0.55; line-height: 1.35; }
+.supp-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.1rem; flex-shrink: 0; min-width: 0; }
+.supp-row-price { font-size: 0.9rem; font-weight: 700; color: var(--color-accent); white-space: nowrap; }
+.supp-row-price small { font-size: 0.68rem; font-weight: 400; opacity: 0.7; }
+.supp-row-sub { font-size: 0.72rem; opacity: 0.55; white-space: nowrap; }
+.supp-total { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(0,0,0,0.07); font-size: 0.88rem; color: var(--color-primary); text-align: right; }
+.supp-total .subtotal-ht { opacity: 0.55; font-size: 0.78rem; margin-left: 0.35rem; }
 
 /* ── Empty state ───────────────────────────────────────────────────────────── */
 .alacarte-empty { background: var(--color-secondary); padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
@@ -1473,6 +1613,11 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
   .dish-row-left { width: 100%; }
   .dish-row-ctrl { width: 100%; justify-content: flex-start; }
 
+  /* Supplément row — le prix passe sous le libellé */
+  .supp-row { align-items: flex-start; gap: 0.7rem; padding: 0.85rem; flex-wrap: wrap; }
+  .supp-row-right { width: 100%; flex-direction: row; align-items: baseline;
+                    justify-content: flex-start; gap: 0.5rem; padding-left: 2.2rem; }
+
   /* Total bar */
   .total-line { flex-direction: column; gap: 0.2rem; align-items: flex-start; }
   .total-line-amounts { gap: 0.5rem; }
@@ -1543,10 +1688,10 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
   .menu-card-ctrl { margin-top: 0.4rem; gap: 0.4rem; }
 
   /* Qty controls — plus grands pour les doigts */
-  .qty-btn { width: 38px; height: 38px; font-size: 1.2rem; }
-  .qty-btn--sm { width: 34px; height: 34px; font-size: 1.1rem; }
-  .qty-input { width: 50px; height: 38px; }
-  .qty-input--sm { width: 44px; height: 34px; }
+  .qty-btn { width: 36px; height: 36px; font-size: 1.2rem; }
+  .qty-btn--sm { width: 32px; height: 32px; font-size: 1.1rem; }
+  .qty-input { width: 44px; height: 36px; }
+  .qty-input--sm { width: 40px; height: 32px; }
   .qty-preset--all { font-size: 0.8rem; padding: 0.35rem 0.7rem; }
   .qty-reset { width: 32px; height: 32px; font-size: 1.1rem; }
 
