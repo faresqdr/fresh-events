@@ -52,6 +52,18 @@ const festivalDurations = ['1 jour', '2 – 3 jours', '4 – 7 jours', 'Plus d\'
 const step = ref(1)
 const wizardRef = ref(null)
 
+// Écran d'entrée : configurer précisément (wizard complet) ou juste décrire
+// sa demande (aucune question de date/lieu/convives). null = pas encore choisi.
+const entryChoice = ref(null)
+
+function chooseDetailed() {
+  entryChoice.value = 'detailed'
+}
+
+function chooseQuick() {
+  entryChoice.value = 'quick'
+}
+
 const event = reactive({
   type: '', name: '', date: '', location: '', guests: 50, timeSlot: '', duration: '',
 })
@@ -69,6 +81,15 @@ const locationPreset = ref('')
 function setLocationPreset(preset) {
   locationPreset.value = preset
   event.location = preset === 'local' ? 'Fresh Food Amnéville' : ''
+}
+
+// Particulier vs société/association : la Société n'est requise que dans le
+// second cas — un mariage ou un anniversaire n'a pas d'organisation à donner.
+const accountType = ref('')
+
+function setAccountType(type) {
+  accountType.value = type
+  if (type === 'particulier') contact.company = ''
 }
 
 const festival = reactive({
@@ -268,6 +289,7 @@ const grandTotalTTC = computed(() => {
 
 const hasProductSelection = computed(() => {
   if (selectionMode.value === 'formule') return !!selectedFormule.value
+  if (selectionMode.value === 'libre') return contact.message.trim().length > 0
   return Object.values(alacarteQuantities).some(q => q > 0)
 })
 
@@ -284,7 +306,10 @@ const canNext = computed(() => {
     if (isFestival.value) return !!festival.serviceType && !!festival.flux && !!festival.duration
     return hasProductSelection.value
   }
-  if (step.value === 4) return !!contact.name && !!contact.company && !!contact.email && !!contact.phone
+  if (step.value === 4) {
+    const accountOk = accountType.value === 'societe' ? !!contact.company.trim() : !!accountType.value
+    return !!contact.name && !!contact.email && !!contact.phone && accountOk
+  }
   return false
 })
 
@@ -377,6 +402,9 @@ async function submitQuote() {
       quantity: event.guests, price: s.price,
     }))
     selectedServiceObjs.value.forEach(s => lines.push({ product_id: s.id, quantity: 1, price: s.price }))
+  } else if (selectionMode.value === 'libre') {
+    // Aucune ligne : la demande tient dans contact.message (texte libre saisi
+    // à l'étape 3). Odoo l'affiche en note interne et dans l'email au client.
   } else {
     for (const [idStr, qty] of Object.entries(alacarteQuantities)) {
       if (qty > 0) {
@@ -400,6 +428,43 @@ async function submitQuote() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ event: eventPayload, lines, contact }),
+    })
+    const data = await res.json()
+    if (data.success) {
+      quoteRef.value = data.quote_ref
+      step.value = 5
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      submitError.value = data.error || 'Une erreur est survenue.'
+    }
+  } catch {
+    submitError.value = 'Erreur de connexion. Veuillez réessayer.'
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+// ── Chemin rapide ("Je ne sais pas encore") ─────────────────────────────────
+// Aucune ligne, aucune date/lieu/convives : seul contact.message porte la
+// demande. Le serveur accepte un devis sans prestation dès qu'un texte libre
+// est fourni, quel que soit le type d'événement (voir submit_quote côté Odoo).
+
+const canSubmitQuick = computed(() =>
+  contact.name.trim() && contact.email.trim() && contact.phone.trim() && contact.message.trim()
+)
+
+async function submitQuickQuote() {
+  if (!canSubmitQuick.value || isSubmitting.value) return
+  isSubmitting.value = true
+  submitError.value = ''
+
+  try {
+    const res = await fetch('/fresh-events/quote/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // Payload volontairement minimal : pas de date/lieu/convives inventés
+      // pour quelqu'un qui n'a pas encore ces réponses.
+      body: JSON.stringify({ event: { type: event.type || '' }, lines: [], contact }),
     })
     const data = await res.json()
     if (data.success) {
@@ -459,8 +524,88 @@ onMounted(() => {
       </div>
     </section>
 
-    <!-- Wizard -->
-    <section ref="wizardRef" class="wizard-section section-padding-lg" v-if="step <= 4">
+    <!-- Choix d'entrée : configurer précisément, ou juste décrire — pour ne
+         pas imposer date/lieu/convives à quelqu'un qui ne les a pas encore
+         en tête. On accompagne, on n'interroge pas. -->
+    <section ref="wizardRef" class="wizard-section section-padding-lg" v-if="entryChoice === null">
+      <div class="container-narrow">
+        <div class="entry-choice">
+          <p class="uppercase accent-color entry-choice-eyebrow">Pour commencer</p>
+          <h2 class="entry-choice-title">Comment souhaitez-vous procéder ?</h2>
+          <div class="accent-line accent-line-center"></div>
+
+          <div class="entry-choice-grid">
+            <button class="entry-choice-card" @click="chooseDetailed">
+              <span class="ecc-icon">🗓️</span>
+              <strong>Je sais ce que je veux</strong>
+              <span class="ecc-sub">Type d'événement, date, menu — configurez votre devis en quelques étapes, prix en temps réel.</span>
+              <span class="ecc-cta">Configurer mon devis →</span>
+            </button>
+            <button class="entry-choice-card" @click="chooseQuick">
+              <span class="ecc-icon">✍️</span>
+              <strong>Je ne sais pas encore</strong>
+              <span class="ecc-sub">Décrivez simplement votre projet, même flou — on vous accompagne et on s'occupe du reste.</span>
+              <span class="ecc-cta">Décrire mon projet →</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chemin rapide : aucune question, on décrit — pas de date, pas de
+         lieu, pas de nombre de convives à deviner. -->
+    <section class="wizard-section section-padding-lg" v-if="entryChoice === 'quick' && step !== 5">
+      <div class="container-narrow">
+        <div class="step-card">
+          <button class="quick-back" @click="entryChoice = null">← Retour</button>
+          <h2 class="step-title">Décrivez votre projet</h2>
+          <p class="quick-intro">
+            Aucune information n'est indispensable pour l'instant — même une idée encore floue nous suffit
+            pour démarrer. Notre équipe revient vers vous <strong>sous 24h</strong> pour affiner ensemble.
+          </p>
+
+          <div class="form-group">
+            <label>Votre projet, en quelques mots *</label>
+            <textarea
+              v-model="contact.message" rows="6"
+              placeholder="Ex : un anniversaire pour une cinquantaine de personnes, plutôt en fin d'année, je ne sais pas encore où ni exactement combien de convives…"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Votre nom *</label>
+              <input v-model="contact.name" type="text" placeholder="Jean Dupont" />
+            </div>
+            <div class="form-group">
+              <label>Téléphone *</label>
+              <input v-model="contact.phone" type="tel" placeholder="06 12 34 56 78" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email *</label>
+              <input v-model="contact.email" type="email" placeholder="contact@exemple.fr" />
+            </div>
+            <div class="form-group">
+              <label>Société <span style="font-weight:400;opacity:0.5">(optionnel)</span></label>
+              <input v-model="contact.company" type="text" placeholder="Si applicable" />
+            </div>
+          </div>
+
+          <div v-if="submitError" class="error-msg">{{ submitError }}</div>
+
+          <button class="final-submit-btn" :disabled="!canSubmitQuick || isSubmitting" @click="submitQuickQuote">
+            <span v-if="!isSubmitting">Envoyer ma demande →</span>
+            <span v-else class="final-submit-loading">Envoi en cours…</span>
+          </button>
+          <p class="quick-note">Sans engagement. On vous répond sous 24h ouvrées.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wizard détaillé -->
+    <section ref="wizardRef" class="wizard-section section-padding-lg" v-if="entryChoice === 'detailed' && step <= 4">
       <div class="container-narrow">
 
         <!-- Progress bar -->
@@ -663,26 +808,51 @@ onMounted(() => {
         <!-- STEP 3B — Menu builder -->
         <div v-if="step === 3 && !isFestival" class="step-card step-card--menu">
 
-          <div v-if="productsLoading" class="loading-state">
+          <!-- Mode switcher : toujours visible, y compris si le catalogue est
+               indisponible — "Décrire ma demande" ne dépend d'aucun produit. -->
+          <div class="mode-switcher mode-switcher--3">
+            <button class="mode-btn" :class="{ active: selectionMode === 'formule' }" @click="switchMode('formule')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Formule clé en main
+            </button>
+            <button class="mode-btn" :class="{ active: selectionMode === 'alacarte' }" @click="switchMode('alacarte')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Composer mon menu
+            </button>
+            <button class="mode-btn" :class="{ active: selectionMode === 'libre' }" @click="switchMode('libre')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              Décrire ma demande
+            </button>
+          </div>
+
+          <!-- ── DEMANDE LIBRE ──────────────────────────────────────────────
+               Aucune sélection de plat : on décrit, l'équipe rappelle le
+               devis à partir de ce texte. Ne dépend pas du catalogue. -->
+          <div v-if="selectionMode === 'libre'" class="libre-panel">
+            <p class="libre-intro">
+              Pas envie de choisir plat par plat ? Décrivez votre événement en quelques
+              phrases — même une idée encore floue — et notre équipe vous prépare un
+              devis sur mesure.
+            </p>
+            <textarea
+              v-model="contact.message"
+              rows="7"
+              class="libre-textarea"
+              placeholder="Ex : anniversaire pour 40 personnes le 12 octobre, cocktail dînatoire, budget entre 30 et 40 € par personne, en extérieur si possible…"
+            ></textarea>
+            <p class="libre-note">
+              Vous pourrez préciser vos coordonnées à l'étape suivante.
+            </p>
+          </div>
+
+          <div v-if="selectionMode !== 'libre' && productsLoading" class="loading-state">
             <div class="spinner"></div>
             <p>Chargement du catalogue...</p>
           </div>
 
-          <div v-else-if="productsError" class="error-msg">{{ productsError }}</div>
+          <div v-else-if="selectionMode !== 'libre' && productsError" class="error-msg">{{ productsError }}</div>
 
-          <template v-else>
-
-            <!-- Mode switcher -->
-            <div class="mode-switcher">
-              <button class="mode-btn" :class="{ active: selectionMode === 'formule' }" @click="switchMode('formule')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                Formule clé en main
-              </button>
-              <button class="mode-btn" :class="{ active: selectionMode === 'alacarte' }" @click="switchMode('alacarte')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                Composer mon menu
-              </button>
-            </div>
+          <template v-else-if="selectionMode !== 'libre'">
 
             <!-- ── FORMULE MODE ──────────────────────────────────────────── -->
             <div v-if="selectionMode === 'formule'">
@@ -1031,15 +1201,28 @@ onMounted(() => {
           <!-- Formulaire contact -->
           <div class="final-form">
             <p class="final-form-label">Qui doit-on contacter ?</p>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Prénom & Nom *</label>
-                <input v-model="contact.name" type="text" placeholder="Jean Dupont" />
+
+            <div class="form-group">
+              <label>Vous êtes *</label>
+              <div class="location-toggle">
+                <button class="location-opt" :class="{ selected: accountType === 'particulier' }" @click="setAccountType('particulier')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Un particulier
+                </button>
+                <button class="location-opt" :class="{ selected: accountType === 'societe' }" @click="setAccountType('societe')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+                  Une société / association
+                </button>
               </div>
-              <div class="form-group">
-                <label>Société / Organisation *</label>
-                <input v-model="contact.company" type="text" placeholder="Votre entreprise" />
-              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Prénom & Nom *</label>
+              <input v-model="contact.name" type="text" placeholder="Jean Dupont" />
+            </div>
+            <div class="form-group" v-if="accountType === 'societe'">
+              <label>Société / Association *</label>
+              <input v-model="contact.company" type="text" placeholder="Nom de l'organisation" />
             </div>
             <div class="form-row">
               <div class="form-group">
@@ -1051,9 +1234,15 @@ onMounted(() => {
                 <input v-model="contact.phone" type="tel" placeholder="06 12 34 56 78" />
               </div>
             </div>
-            <div class="form-group">
+            <!-- En mode "Décrire ma demande", ce texte est déjà celui saisi à
+                 l'étape 3 (même champ) — le reproposer ferait doublon. -->
+            <div class="form-group" v-if="selectionMode !== 'libre'">
               <label>Précisions ou questions <span style="font-weight:400;opacity:0.5">(optionnel)</span></label>
               <textarea v-model="contact.message" rows="3" placeholder="Régimes alimentaires, contraintes logistiques, demandes spéciales..."></textarea>
+            </div>
+            <div class="form-group" v-else>
+              <label>Votre demande <span style="font-weight:400;opacity:0.5">(modifiable)</span></label>
+              <textarea v-model="contact.message" rows="3"></textarea>
             </div>
           </div>
 
@@ -1220,7 +1409,7 @@ textarea { resize: vertical; min-height: 110px; }
 /* ── Mode switcher ─────────────────────────────────────────────────────────── */
 .mode-switcher { display: flex; margin-bottom: 2rem; border: 2px solid var(--color-primary); }
 .mode-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.9rem 1.5rem; background: transparent; border: none; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-primary); cursor: pointer; transition: all var(--transition-fast); }
-.mode-btn:first-child { border-right: 2px solid var(--color-primary); }
+.mode-btn:not(:last-child) { border-right: 2px solid var(--color-primary); }
 .mode-btn:hover { background: rgba(74, 124, 89, 0.05); }
 .mode-btn.active { background: var(--color-primary); color: var(--color-white); }
 
@@ -1488,6 +1677,46 @@ textarea { resize: vertical; min-height: 110px; }
 .amount-ttc-lg { font-size: 1.4rem; font-weight: 700; color: var(--color-primary); }
 .total-note { font-size: 0.8rem; opacity: 0.5; font-style: italic; margin-top: 0.5rem; }
 
+/* ── Demande libre ─────────────────────────────────────────────────────────── */
+.libre-panel { padding: 0.5rem 0 1rem; }
+.libre-intro { font-size: 1rem; line-height: 1.7; color: var(--color-black); opacity: 0.75; max-width: 60ch; margin-bottom: 1.5rem; }
+.libre-textarea {
+  width: 100%; font-family: var(--font-body); font-size: 1rem; line-height: 1.6;
+  padding: 1.1rem 1.25rem; border: 1px solid rgba(0,0,0,0.14); background: var(--color-secondary);
+  color: var(--color-black); resize: vertical; transition: border-color var(--transition-fast);
+}
+.libre-textarea:focus { outline: none; border-color: var(--color-accent); }
+.libre-note { font-size: 0.82rem; opacity: 0.5; margin-top: 0.85rem; }
+
+/* ── Écran d'entrée : configurer vs. décrire ─────────────────────────────────── */
+.entry-choice { text-align: center; }
+.entry-choice-eyebrow { margin-bottom: 1rem; }
+.entry-choice-title { font-size: clamp(1.6rem, 3.5vw, 2.25rem); margin-bottom: 0.5rem; }
+.entry-choice-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem; margin-top: 3rem; text-align: left;
+}
+.entry-choice-card {
+  display: flex; flex-direction: column; gap: 0.6rem;
+  background: var(--color-white); border: 1px solid rgba(0,0,0,0.1);
+  padding: 2rem 1.75rem; cursor: pointer; text-align: left;
+  transition: all var(--transition-base); font-family: var(--font-body);
+}
+.entry-choice-card:hover { border-color: var(--color-accent); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.ecc-icon { font-size: 1.75rem; }
+.entry-choice-card strong { font-family: var(--font-heading); font-size: 1.25rem; color: var(--color-black); font-weight: 500; }
+.ecc-sub { font-size: 0.9rem; line-height: 1.6; color: var(--color-black); opacity: 0.7; }
+.ecc-cta { margin-top: 0.5rem; font-size: 0.85rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ── Chemin rapide ─────────────────────────────────────────────────────────── */
+.quick-back {
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-size: 0.85rem; font-weight: 600; color: var(--color-accent);
+  margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.quick-intro { font-size: 1rem; line-height: 1.7; opacity: 0.75; max-width: 60ch; margin-bottom: 2rem; }
+.quick-note { font-size: 0.8rem; opacity: 0.5; text-align: center; margin-top: 1rem; }
+
 /* ── Step helpers ──────────────────────────────────────────────────────────── */
 .step-helper {
   display: flex; align-items: flex-start; gap: 1rem;
@@ -1597,7 +1826,7 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
   .step-label { font-size: 0.65rem; }
   .location-toggle { flex-direction: column; }
   .mode-switcher { flex-direction: column; }
-  .mode-btn:first-child { border-right: none; border-bottom: 2px solid var(--color-primary); }
+  .mode-btn:not(:last-child) { border-right: none; border-bottom: 2px solid var(--color-primary); }
   .product-card-inner { flex-direction: column; gap: 1rem; }
   .product-price-block { text-align: left; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
   .product-price { font-size: 1.3rem; }

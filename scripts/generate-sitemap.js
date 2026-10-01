@@ -15,7 +15,11 @@ const PRIORITY_BY_PATH = {
 
 const today = new Date().toISOString().slice(0, 10)
 
-const urls = routes.map((route) => {
+// Les pages privées (meta.robots contient "noindex") n'ont rien à faire
+// dans le sitemap : ce sont des documents de travail, pas du contenu public.
+const publicRoutes = routes.filter((route) => !route.meta?.robots?.includes('noindex'))
+
+const urls = publicRoutes.map((route) => {
   const priority = PRIORITY_BY_PATH[route.path] || '0.8'
   return `  <url>
     <loc>${SITE_URL}${route.path}</loc>

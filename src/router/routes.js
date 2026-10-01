@@ -21,6 +21,15 @@ export const routeDefs = [
         }
     },
     {
+        path: '/catalogue',
+        name: 'catalogue',
+        component: () => import('../views/CatalogueView.vue'),
+        meta: {
+            title: 'Catalogue Traiteur — Formules, Plats & Prestations | Fresh Events',
+            description: 'Le catalogue complet Fresh Events : formules traiteur clé en main, enrichissements, plats à la carte et prestations événementielles. Amnéville, Moselle, Lorraine, Luxembourg.'
+        }
+    },
+    {
         path: '/pourquoi-fresh-events',
         name: 'why-us',
         component: () => import('../views/WhyUsView.vue'),
@@ -45,6 +54,43 @@ export const routeDefs = [
         meta: {
             title: 'Solutions Personnalisées pour Événements | Fresh Events',
             description: 'Solutions sur mesure pour événements d\'entreprise, séminaires, food events. Amnéville et région.'
+        }
+    },
+    {
+        path: '/partenaires/zoo-amneville',
+        name: 'zoo-amneville',
+        component: () => import('../views/partenaires/ZooAmnevilleView.vue'),
+        meta: {
+            title: 'Fresh Events × Zoo d\'Amnéville — Proposition Partenariat',
+            description: 'Document privé de travail — non destiné à l\'indexation.',
+            robots: 'noindex, nofollow'
+        }
+    },
+    {
+        path: '/mentions-legales',
+        name: 'mentions-legales',
+        component: () => import('../views/MentionsLegalesView.vue'),
+        meta: {
+            title: 'Mentions Légales | Fresh Events',
+            description: 'Mentions légales du site Fresh Events — éditeur, hébergement, propriété intellectuelle.'
+        }
+    },
+    {
+        path: '/confidentialite',
+        name: 'confidentialite',
+        component: () => import('../views/ConfidentialiteView.vue'),
+        meta: {
+            title: 'Politique de Confidentialité | Fresh Events',
+            description: 'Politique de confidentialité et protection des données personnelles — Fresh Events.'
+        }
+    },
+    {
+        path: '/cgv',
+        name: 'cgv',
+        component: () => import('../views/CGVView.vue'),
+        meta: {
+            title: 'Conditions Générales de Vente | Fresh Events',
+            description: 'Conditions générales de vente applicables aux prestations Fresh Events.'
         }
     },
     {

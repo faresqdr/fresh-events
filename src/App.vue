@@ -18,6 +18,9 @@ useHead({
     { property: 'og:url', content: canonicalUrl },
     { property: 'og:title', content: computed(() => route.meta.title || 'Fresh Events') },
     { property: 'og:description', content: computed(() => route.meta.description || 'Fresh Events - Restauration événémentielle premium à Amnéville') },
+    // Document commercial privé (ex. proposition partenaire) : jamais indexé,
+    // jamais suivi — meta.robots le déclare explicitement sur sa route.
+    { name: 'robots', content: computed(() => route.meta.robots || 'index, follow') },
   ],
   link: [
     { rel: 'canonical', href: canonicalUrl },

@@ -134,7 +134,8 @@ h2 {
     font-weight: 500;
 }
 
-Layout & Utility Classes */ .container {
+/* Layout & Utility Classes */
+.container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 clamp(1.5rem, 5vw, 4rem);
@@ -420,7 +421,8 @@ Layout & Utility Classes */ .container {
     color: var(--color-white);
 }
 
-- Premium responsive layouts */ .grid-2 {
+/* Premium responsive layouts */
+.grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: clamp(2rem, 5vw, 4rem);

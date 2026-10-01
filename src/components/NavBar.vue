@@ -56,6 +56,7 @@ onUnmounted(() => {
         <nav class="nav-links">
           <RouterLink to="/" class="nav-link">Accueil</RouterLink>
           <RouterLink to="/offre" class="nav-link">Notre Offre</RouterLink>
+          <RouterLink to="/catalogue" class="nav-link">Catalogue</RouterLink>
           <RouterLink to="/pourquoi-fresh-events" class="nav-link">Pourquoi Nous</RouterLink>
           <RouterLink to="/savoir-faire" class="nav-link">Savoir-Faire</RouterLink>
           <RouterLink to="/solutions" class="nav-link">Solutions</RouterLink>
@@ -72,6 +73,7 @@ onUnmounted(() => {
           <RouterLink to="/devis" @click="toggleMenu" class="nav-devis-mobile">✦ Devis gratuit en ligne →</RouterLink>
           <RouterLink to="/" @click="toggleMenu" class="nav-link-mobile">Accueil</RouterLink>
           <RouterLink to="/offre" @click="toggleMenu" class="nav-link-mobile">Notre Offre</RouterLink>
+          <RouterLink to="/catalogue" @click="toggleMenu" class="nav-link-mobile">Catalogue</RouterLink>
           <RouterLink to="/pourquoi-fresh-events" @click="toggleMenu" class="nav-link-mobile">Pourquoi Nous</RouterLink>
           <RouterLink to="/savoir-faire" @click="toggleMenu" class="nav-link-mobile">Savoir-Faire</RouterLink>
           <RouterLink to="/solutions" @click="toggleMenu" class="nav-link-mobile">Solutions</RouterLink>
@@ -131,7 +133,7 @@ onUnmounted(() => {
 
 .nav-links {
   display: flex;
-  gap: 2.5rem;
+  gap: clamp(1.1rem, 1.9vw, 2.5rem);
   align-items: center;
 }
 

@@ -16,6 +16,14 @@ export default defineConfig({
     },
   },
   server: {
+    // Le catalogue et le configurateur de devis appellent l'API Odoo sur
+    // /fresh-events/* — en prod c'est nginx qui proxifie, en dev c'est ici.
+    proxy: {
+      '/fresh-events': {
+        target: 'http://127.0.0.1:8069',
+        changeOrigin: true,
+      },
+    },
     headers: {
       'X-UA-Compatible': 'IE=edge',
       'X-Content-Type-Options': 'nosniff',

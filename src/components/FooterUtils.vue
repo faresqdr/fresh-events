@@ -24,6 +24,7 @@ const currentYear = new Date().getFullYear()
           <ul>
             <li><RouterLink to="/">Accueil</RouterLink></li>
             <li><RouterLink to="/offre">Notre Offre</RouterLink></li>
+            <li><RouterLink to="/catalogue">Catalogue Traiteur</RouterLink></li>
             <li><RouterLink to="/pourquoi-fresh-events">Pourquoi Nous</RouterLink></li>
             <li><RouterLink to="/savoir-faire">Savoir-Faire</RouterLink></li>
             <li><RouterLink to="/solutions">Solutions</RouterLink></li>
@@ -56,11 +57,11 @@ const currentYear = new Date().getFullYear()
         <div class="footer-bottom-content">
           <p>&copy; {{ currentYear }} Fresh Events. Tous droits réservés.</p>
           <div class="footer-links">
-            <a href="#">Mentions Légales</a>
+            <RouterLink to="/mentions-legales">Mentions Légales</RouterLink>
             <span class="separator">•</span>
-            <a href="#">Confidentialité</a>
+            <RouterLink to="/confidentialite">Confidentialité</RouterLink>
             <span class="separator">•</span>
-            <a href="#">CGV</a>
+            <RouterLink to="/cgv">CGV</RouterLink>
           </div>
         </div>
       </div>
@@ -101,10 +102,9 @@ const currentYear = new Date().getFullYear()
 }
 
 .footer-logo {
-  height: 70px;
+  height: 88px;
   width: auto;
   display: block;
-  filter: brightness(0) invert(1);
 }
 
 .footer-tagline {
