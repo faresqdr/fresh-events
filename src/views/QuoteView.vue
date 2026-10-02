@@ -1,5 +1,13 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
+import {
+  computeFormuleTotal, computeFormuleTotalTTC,
+  computeAlacarteTotal, computeAlacarteTotalTTC,
+  computeSupplementsTotal, computeSupplementsTotalTTC,
+  computeServicesTotal, computeServicesTotalTTC,
+  computeGrandTotal, computeGrandTotalTTC,
+  computeHasProductSelection, computeCanNext,
+} from '../utils/quotePricing.js'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -238,19 +246,11 @@ const selectedServiceObjs = computed(() =>
   optionalServices.value.filter(p => selectedServices.value.includes(p.id))
 )
 
-const formuleTotal = computed(() =>
-  selectedFormuleObj.value ? selectedFormuleObj.value.price * event.guests : 0
-)
-const formuleTotalTTC = computed(() =>
-  selectedFormuleObj.value ? (selectedFormuleObj.value.price_ttc || selectedFormuleObj.value.price) * event.guests : 0
-)
+const formuleTotal = computed(() => computeFormuleTotal(selectedFormuleObj.value, event.guests))
+const formuleTotalTTC = computed(() => computeFormuleTotalTTC(selectedFormuleObj.value, event.guests))
 
-const alacarteTotal = computed(() =>
-  selectedAlacarteObjs.value.reduce((sum, p) => sum + p.price * (alacarteQuantities[p.id] || 0), 0)
-)
-const alacarteTotalTTC = computed(() =>
-  selectedAlacarteObjs.value.reduce((sum, p) => sum + (p.price_ttc || p.price) * (alacarteQuantities[p.id] || 0), 0)
-)
+const alacarteTotal = computed(() => computeAlacarteTotal(selectedAlacarteObjs.value, alacarteQuantities))
+const alacarteTotalTTC = computed(() => computeAlacarteTotalTTC(selectedAlacarteObjs.value, alacarteQuantities))
 
 // ── Enrichissements de la formule sélectionnée ───────────────────────────────
 // Le prix vient d'Odoo, propre au couple (formule, produit).
@@ -264,34 +264,22 @@ const selectedSupplementObjs = computed(() =>
 )
 
 // Tarif par personne × nombre de convives — comme la formule elle-même
-const supplementsTotal = computed(() =>
-  selectedSupplementObjs.value.reduce((sum, s) => sum + s.price, 0) * event.guests
-)
-const supplementsTotalTTC = computed(() =>
-  selectedSupplementObjs.value.reduce((sum, s) => sum + (s.price_ttc || s.price), 0) * event.guests
-)
+const supplementsTotal = computed(() => computeSupplementsTotal(selectedSupplementObjs.value, event.guests))
+const supplementsTotalTTC = computed(() => computeSupplementsTotalTTC(selectedSupplementObjs.value, event.guests))
 
-const servicesTotal = computed(() =>
-  selectedServiceObjs.value.reduce((sum, p) => sum + p.price, 0)
-)
-const servicesTotalTTC = computed(() =>
-  selectedServiceObjs.value.reduce((sum, p) => sum + (p.price_ttc || p.price), 0)
-)
+const servicesTotal = computed(() => computeServicesTotal(selectedServiceObjs.value))
+const servicesTotalTTC = computed(() => computeServicesTotalTTC(selectedServiceObjs.value))
 
-const grandTotal = computed(() => {
-  if (selectionMode.value === 'formule') return formuleTotal.value + supplementsTotal.value + servicesTotal.value
-  return alacarteTotal.value + servicesTotal.value
-})
-const grandTotalTTC = computed(() => {
-  if (selectionMode.value === 'formule') return formuleTotalTTC.value + supplementsTotalTTC.value + servicesTotalTTC.value
-  return alacarteTotalTTC.value + servicesTotalTTC.value
-})
+const grandTotal = computed(() => computeGrandTotal(selectionMode.value, {
+  formuleTotal: formuleTotal.value, supplementsTotal: supplementsTotal.value, servicesTotal: servicesTotal.value, alacarteTotal: alacarteTotal.value,
+}))
+const grandTotalTTC = computed(() => computeGrandTotalTTC(selectionMode.value, {
+  formuleTotalTTC: formuleTotalTTC.value, supplementsTotalTTC: supplementsTotalTTC.value, servicesTotalTTC: servicesTotalTTC.value, alacarteTotalTTC: alacarteTotalTTC.value,
+}))
 
-const hasProductSelection = computed(() => {
-  if (selectionMode.value === 'formule') return !!selectedFormule.value
-  if (selectionMode.value === 'libre') return contact.message.trim().length > 0
-  return Object.values(alacarteQuantities).some(q => q > 0)
-})
+const hasProductSelection = computed(() => computeHasProductSelection(selectionMode.value, {
+  selectedFormule: selectedFormule.value, contactMessage: contact.message, alacarteQuantities,
+}))
 
 function dishCategoryTotal(cat) {
   return dishableProducts.value
@@ -299,19 +287,9 @@ function dishCategoryTotal(cat) {
     .reduce((sum, p) => sum + (dishQuantities[p.id] || 0), 0)
 }
 
-const canNext = computed(() => {
-  if (step.value === 1) return !!event.type
-  if (step.value === 2) return !!event.date && !!event.location && event.guests > 0 && !!event.timeSlot
-  if (step.value === 3) {
-    if (isFestival.value) return !!festival.serviceType && !!festival.flux && !!festival.duration
-    return hasProductSelection.value
-  }
-  if (step.value === 4) {
-    const accountOk = accountType.value === 'societe' ? !!contact.company.trim() : !!accountType.value
-    return !!contact.name && !!contact.email && !!contact.phone && accountOk
-  }
-  return false
-})
+const canNext = computed(() => computeCanNext(step.value, {
+  event, isFestival: isFestival.value, festival, hasProductSelection: hasProductSelection.value, accountType: accountType.value, contact,
+}))
 
 const stepLabels = computed(() => ['Type', 'Événement', isFestival.value ? 'Format' : 'Menu', 'Contact'])
 

@@ -9,6 +9,7 @@
     "build": "vite-ssg build",
     "postbuild": "node scripts/generate-sitemap.js",
     "preview": "vite preview",
+    "test": "vitest run",
     "server": "node server.js",
     "start": "npm run server",
     "deploy": "node scripts/deploy.js"
@@ -29,9 +30,12 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.3",
+    "@vue/test-utils": "^2.5.1",
     "concurrently": "^8.2.2",
+    "jsdom": "^29.1.1",
     "vite": "^7.3.1",
-    "vite-plugin-vue-devtools": "^8.0.5"
+    "vite-plugin-vue-devtools": "^8.0.5",
+    "vitest": "^4.1.11"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

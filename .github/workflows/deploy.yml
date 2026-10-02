@@ -16,13 +16,14 @@ jobs:
   deploy:
     runs-on: [self-hosted, fresh-events]
     steps:
-      - name: Update checkout + rebuild
+      - name: Update checkout, test, rebuild
         run: |
           set -euo pipefail
           cd /var/www/fresh-events
           git fetch --prune origin main
           git reset --hard origin/main
           npm ci
+          npm test
           npm run build
 
       - name: Health check
